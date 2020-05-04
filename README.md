@@ -1,0 +1,2 @@
+# decisions.jira
+Jira Integration
