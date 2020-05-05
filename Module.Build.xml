@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <CreateModuleInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Clients>
-    <DotNetCoreDll>..\..\lib\CoreServicesClients.Net.dll</DotNetCoreDll>
-    <DotNetFrontendFrameworkDll>..\..\output\bincore\DecisionsFramework.Net.dll</DotNetFrontendFrameworkDll>
-    <SLCoreDll>..\..\lib\CoreServicesClients.SL.dll</SLCoreDll>
-    <SLFrontendFrameworkDll>..\..\output\bincore\DecisionsFramework.SL.dll</SLFrontendFrameworkDll>
-    <SilverLightsSDKAssembliesPath>..\..\lib\silverlight</SilverLightsSDKAssembliesPath>
+    <DotNetCoreDll>.\packages\DecisionsSDK.6.8.0\lib\CoreServicesClients.Net.dll</DotNetCoreDll>
+    <DotNetFrontendFrameworkDll>.\packages\DecisionsSDK.6.8.0\lib\DecisionsFramework.Net.dll</DotNetFrontendFrameworkDll>
+    <SLCoreDll></SLCoreDll>
+    <SLFrontendFrameworkDll></SLFrontendFrameworkDll>
+    <SilverLightsSDKAssembliesPath></SilverLightsSDKAssembliesPath>
     <References/>
   </Clients>
   <Resources NoComponents="true">
@@ -23,9 +23,7 @@
     <InstallScript>
     </InstallScript>
     <SqlScripts />
-    <ObjectsToImport>
-	    <string>.\Entities\*.*</string>
-    </ObjectsToImport>
+    <ObjectsToImport></ObjectsToImport>
     <MsSqlScript>
     </MsSqlScript>
     <MySqlScript>
