@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="build_all">
+
+  <PropertyGroup>
+    <CreateModule>..\..\output\binutils\CreateModule.exe</CreateModule>
+    <CreateModuleVersion>..\..\output\binutils\UpdateModuleVersionOnBuild.exe</CreateModuleVersion>
+    <CheckChanges>..\..\output\binutils\CheckForFileChanges.exe</CheckChanges>
+  </PropertyGroup>
+
+ 	<Target Name="build_all">
+		<Exec Command="$(CheckChanges) &quot;.&quot;" ConsoleToMsBuild="true">
+			<Output TaskParameter="ConsoleOutput" PropertyName="ShouldBuild" />
+		</Exec>
+		<CallTarget Targets="do_build" Condition="$(ShouldBuild.Contains('CHANGES'))" />
+		<Exec Command="$(CheckChanges) &quot;.&quot;" ConsoleToMsBuild="true"/>
+	</Target>
+
+	<Target Name="do_build">
+    <MSBuild Projects=".\Decisions.Jira\JiraAdvancedSteps.csproj" />
+
+    <CallTarget Targets="build_module"/>
+
+  </Target>
+
+  <Target Name="build_sl_clients">
+    <Exec Command="$(CreateModule) -buildslclients Decisions.Jira -output &quot;..\..\output\modules\Decisions.Jira.Clients&quot; -buildfile Module.Build.xml"/>
+  </Target>
+  <Target Name="build_net_clients">
+    <Exec Command="$(CreateModule) -buildnetclients Decisions.Jira -output &quot;..\..\output\modules\Decisions.Jira.Clients&quot; -buildfile Module.Build.xml"/>
+  </Target>
+  
+  <Target Name="build_module">
+	  <Exec Command="$(CreateModuleVersion) &quot;..\..\Build.version&quot; &quot;Module.Build.xml&quot; &quot;Module.Build.versioned.xml&quot; &quot;..\..\Version.cs&quot; false &quot;Decisions.Jira&quot; &quot;..\AllModules.xml&quot;"/>
+	  <Exec Command="$(CreateModule) -buildmodule Decisions.Jira -output &quot;..\..\output\modules&quot; -buildfile Module.Build.versioned.xml"/>   
+  </Target>
+
+</Project>

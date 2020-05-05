@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<CreateModuleInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Clients>
+    <DotNetCoreDll>..\..\lib\CoreServicesClients.Net.dll</DotNetCoreDll>
+    <DotNetFrontendFrameworkDll>..\..\output\bincore\DecisionsFramework.Net.dll</DotNetFrontendFrameworkDll>
+    <SLCoreDll>..\..\lib\CoreServicesClients.SL.dll</SLCoreDll>
+    <SLFrontendFrameworkDll>..\..\output\bincore\DecisionsFramework.SL.dll</SLFrontendFrameworkDll>
+    <SilverLightsSDKAssembliesPath>..\..\lib\silverlight</SilverLightsSDKAssembliesPath>
+    <References/>
+  </Clients>
+  <Resources NoComponents="true">
+    <ServicesDlls>
+      <string>.\Decisions.Jira\bin\Debug\Decisions.Jira.dll</string>
+    </ServicesDlls>
+    <CliDlls/>
+    <WebPages/>
+	<MvcViews>
+	</MvcViews>
+	<MvcDlls>
+	</MvcDlls>
+    <AgentDlls>
+    </AgentDlls>
+    <InstallScript>
+    </InstallScript>
+    <SqlScripts />
+    <ObjectsToImport>
+	    <string>.\Entities\*.*</string>
+    </ObjectsToImport>
+    <MsSqlScript>
+    </MsSqlScript>
+    <MySqlScript>
+    </MySqlScript>
+    <OracleScript>
+    </OracleScript>
+  </Resources>
+  <Description>Module to manage Issues, Users and Projects in Jira.</Description>
+</CreateModuleInfo>

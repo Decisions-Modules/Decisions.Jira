@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29911.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Decisions.Jira", "Decisions.Jira\Decisions.Jira.csproj", "{B782A73F-DB60-4A66-8522-5A8849A0F2D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Decisions.Jira.TestSuite", "Decisions.Jira.TestSuite\Decisions.Jira.TestSuite.csproj", "{EEE5A63B-493F-4930-8535-FF6955D3C2B2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B782A73F-DB60-4A66-8522-5A8849A0F2D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B782A73F-DB60-4A66-8522-5A8849A0F2D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B782A73F-DB60-4A66-8522-5A8849A0F2D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B782A73F-DB60-4A66-8522-5A8849A0F2D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEE5A63B-493F-4930-8535-FF6955D3C2B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEE5A63B-493F-4930-8535-FF6955D3C2B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEE5A63B-493F-4930-8535-FF6955D3C2B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEE5A63B-493F-4930-8535-FF6955D3C2B2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3F84CD8A-F364-4B26-8FF6-3AD18372189B}
+	EndGlobalSection
+EndGlobal
