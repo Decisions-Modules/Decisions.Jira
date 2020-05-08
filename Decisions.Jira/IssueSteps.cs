@@ -11,7 +11,7 @@ namespace Decisions.Jira
 	[AutoRegisterMethodsOnClass(true, "Integration/Jira/Issues")]
 	public static class IssueSteps
     {
-        public static JiraResult CreateIssue (JiraCredentials Credentials, JiraIssue NewIssue)
+        public static JiraResult Create (JiraCredentials Credentials, JiraIssue NewIssue)
         {
 			try
 			{ 

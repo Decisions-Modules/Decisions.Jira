@@ -11,32 +11,50 @@ namespace Decisions.JiraTestSuite
         [TestMethod]
         public void Create()
         {
-             JiraProjectModel userModel = new JiraProjectModel
-            {
-                Description = "New Project123",
-                Name = "Test123",
-                Key = "NP123", 
-                ProjectTemplateKey = "com.pyxis.greenhopper.jira:gh-simplified-agility-kanban",
-                LeadAccountId = "5ea1ce8c1f32260c13047996" ,
-                AssigneeType= "UNASSIGNED", 
-                ProjectTypeKey="business"
-
-            };
-            HttpStatusCode actualStatusCode = Project.Create(userModel).Status;
+            HttpStatusCode actualStatusCode = Project.Create(TestData.GetJiraCredentials(), TestData.GetJiraProject()).Status;
             HttpStatusCode expectedStatusCode = HttpStatusCode.Created;
             Assert.AreEqual(expectedStatusCode, actualStatusCode);
         }
         [TestMethod]
         public void Edit()
         {
-            JiraProjectModel userModel = new JiraProjectModel
-            {
-                ProjectIdOrKey = "DW",
-                Description = "Test Desc",
-                Name = "Dec_wfh_1",
-                Key = "DW"
-            };
-            HttpStatusCode actualStatusCode = Project.Edit(userModel).Status;
+            JiraProjectModel project = TestData.GetJiraProject();
+            Project.Create(TestData.GetJiraCredentials(), project);
+
+            project.Description = "Test Desc";
+            project.Name = "Dec_wfh_1";
+
+            HttpStatusCode actualStatusCode = Project.Edit(TestData.GetJiraCredentials(), project).Status;
+            HttpStatusCode expectedStatusCode = HttpStatusCode.OK;
+            Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        }
+
+        [TestMethod]
+        public void Delete()
+        {
+            JiraProjectModel project = TestData.GetJiraProject();
+            Project.Create(TestData.GetJiraCredentials(), project);
+            HttpStatusCode actualStatusCode = Project.Delete(TestData.GetJiraCredentials(), project.ProjectIdOrKey).Status;
+            HttpStatusCode expectedStatusCode = HttpStatusCode.NoContent;
+            Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        }
+
+        [TestMethod]
+        public void GetProjectTypeByKey()
+        {
+            JiraProjectModel project = TestData.GetJiraProject();
+            Project.Create(TestData.GetJiraCredentials(), project);
+            HttpStatusCode actualStatusCode = Project.GetProjectTypeByKey(TestData.GetJiraCredentials(), project.ProjectTypeKey).Status;
+            HttpStatusCode expectedStatusCode = HttpStatusCode.OK;
+            Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        }
+
+        [TestMethod]
+        public void GetАccessibleProjectTypeByKey()
+        {
+            JiraProjectModel project = TestData.GetJiraProject();
+            Project.Create(TestData.GetJiraCredentials(), project);
+            HttpStatusCode actualStatusCode = Project.GetАccessibleProjectTypeByKey(TestData.GetJiraCredentials(), project.ProjectTypeKey).Status;
             HttpStatusCode expectedStatusCode = HttpStatusCode.OK;
             Assert.AreEqual(expectedStatusCode, actualStatusCode);
         }

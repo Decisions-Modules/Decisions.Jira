@@ -9,12 +9,12 @@ using DecisionsFramework.Design.Flow;
 namespace Decisions.Jira
 {
 	[AutoRegisterMethodsOnClass(true, "Integration/Jira/Users")]
-    public static class User
-    {
+	public static class User
+	{
 		public static JiraResult Create(JiraCredentials Credentials, JiraUserModel JiraUserModel)
 		{
 			try
-			{ 
+			{
 				string data = JsonConvert.SerializeObject(JiraUserModel, Formatting.None,
 							new JsonSerializerSettings
 							{
@@ -22,8 +22,8 @@ namespace Decisions.Jira
 							});
 				var content =
 				new StringContent(data, Encoding.UTF8, "application/json");
-				var response =   new Utility().GetClient(Credentials).PostAsync("user", content).Result;
-				var responseString =   response.Content.ReadAsStringAsync().Result;
+				var response = new Utility().GetClient(Credentials).PostAsync("user", content).Result;
+				var responseString = response.Content.ReadAsStringAsync().Result;
 				return new JiraResult { Message = response.StatusCode != HttpStatusCode.Created ? responseString : string.Empty, Status = response.StatusCode, Data = response.StatusCode == HttpStatusCode.Created ? responseString : string.Empty };
 			}
 			catch (Exception ex)
@@ -39,8 +39,8 @@ namespace Decisions.Jira
 				string data = JsonConvert.SerializeObject(DataObj);
 				var content =
 				new StringContent(data, Encoding.UTF8, "application/json");
-				var response =   new Utility().GetClient(Credentials).PostAsync($"project/{JiraAssignmentModel.ProjectIdOrKey}/role/{JiraAssignmentModel.RoleId}", content).Result;
-				var responseString =   response.Content.ReadAsStringAsync().Result;
+				var response = new Utility().GetClient(Credentials).PostAsync($"project/{JiraAssignmentModel.ProjectIdOrKey}/role/{JiraAssignmentModel.RoleId}", content).Result;
+				var responseString = response.Content.ReadAsStringAsync().Result;
 				return new JiraResult { Message = response.StatusCode != HttpStatusCode.OK ? responseString : string.Empty, Status = response.StatusCode, Data = response.StatusCode == HttpStatusCode.OK ? responseString : string.Empty };
 			}
 			catch (Exception ex)
@@ -49,6 +49,29 @@ namespace Decisions.Jira
 			}
 		}
 
-		 
+		public static JiraResult Edit(JiraCredentials Credentials, JiraUserModel JiraUserModel)
+		{
+			try
+			{
+				string data = JsonConvert.SerializeObject(JiraUserModel, Formatting.None,
+							new JsonSerializerSettings
+							{
+								NullValueHandling = NullValueHandling.Ignore
+							});
+				var content =
+				new StringContent(data, Encoding.UTF8, "application/json");
+				var response = new Utility().GetClient(Credentials).PutAsync($"user/{JiraUserModel.EmailAddress}", content).Result;
+				var responseString = response.Content.ReadAsStringAsync().Result;
+				return new JiraResult { Message = response.StatusCode != HttpStatusCode.Created ? responseString : string.Empty, Status = response.StatusCode, Data = response.StatusCode == HttpStatusCode.Created ? responseString : string.Empty };
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
+
+
+
 	}
+
 }

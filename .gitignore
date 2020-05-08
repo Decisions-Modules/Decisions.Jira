@@ -1,0 +1,8 @@
+*.dll
+*.pdb
+Decisions.Jira.TestSuite/bin/
+Decisions.Jira.TestSuite/obj/
+Decisions.Jira/bin/
+Decisions.Jira/obj/
+
+

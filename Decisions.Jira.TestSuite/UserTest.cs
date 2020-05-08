@@ -21,7 +21,7 @@ namespace Decisions.JiraTestSuite
                 Name = userName,
                 Password = userName
             };
-            HttpStatusCode actualStatusCode = User.Create(jiraUserModel).Status;
+            HttpStatusCode actualStatusCode = User.Create(TestData.GetJiraCredentials(), jiraUserModel).Status;
             HttpStatusCode expectedStatusCode = HttpStatusCode.Created;
             Assert.AreEqual(expectedStatusCode, actualStatusCode);
         }
@@ -36,7 +36,7 @@ namespace Decisions.JiraTestSuite
              RoleId= 10006
 
          };
-        HttpStatusCode actualStatusCode = User.AssignProject(jiraAssignModel).Status;
+        HttpStatusCode actualStatusCode = User.AssignProject(TestData.GetJiraCredentials(), jiraAssignModel).Status;
         HttpStatusCode expectedStatusCode = HttpStatusCode.OK;
         Assert.AreEqual(expectedStatusCode, actualStatusCode);
     }

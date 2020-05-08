@@ -9,7 +9,7 @@ using DecisionsFramework.Design.Flow;
 namespace Decisions.Jira
 {
 	[AutoRegisterMethodsOnClass(true, "Integration/Jira/Projects")]
-    public static class Project
+	public static class Project
     {
          public static JiraResult Create(JiraCredentials Credentials, JiraProjectModel NewProject)
 		{
@@ -31,6 +31,7 @@ namespace Decisions.Jira
 				throw ex;
 			}
 		}
+
 		public static JiraResult Edit(JiraCredentials Credentials, JiraProjectModel ProjectModel)
 		{
 			try
@@ -43,6 +44,48 @@ namespace Decisions.Jira
 				var content =
 				new StringContent(data, Encoding.UTF8, "application/json");
 				var response = new Utility().GetClient(Credentials).PutAsync($"project/{ProjectModel.ProjectIdOrKey}", content).Result;
+				var responseString = response.Content.ReadAsStringAsync().Result;
+				return new JiraResult { Message = response.StatusCode != HttpStatusCode.OK ? responseString : string.Empty, Status = response.StatusCode, Data = response.StatusCode == HttpStatusCode.OK ? responseString : string.Empty };
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
+
+		public static JiraResult Delete(JiraCredentials Credentials, string ProjectIdOrKey)
+		{
+			try
+			{
+				var response = new Utility().GetClient(Credentials).DeleteAsync($"project/{ProjectIdOrKey}").Result;
+				var responseString = response.Content.ReadAsStringAsync().Result;
+				return new JiraResult { Message = response.StatusCode != HttpStatusCode.NoContent ? responseString : string.Empty, Status = response.StatusCode, Data = response.StatusCode == HttpStatusCode.NoContent ? responseString : string.Empty };
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
+
+		public static JiraResult GetProjectTypeByKey(JiraCredentials Credentials, string projectTypeKey)
+		{
+			try
+			{
+				var response = new Utility().GetClient(Credentials).GetAsync($"project/type/{projectTypeKey}").Result;
+				var responseString = response.Content.ReadAsStringAsync().Result;
+				return new JiraResult { Message = response.StatusCode != HttpStatusCode.OK ? responseString : string.Empty, Status = response.StatusCode, Data = response.StatusCode == HttpStatusCode.OK ? responseString : string.Empty };
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
+
+		public static JiraResult GetАccessibleProjectTypeByKey(JiraCredentials Credentials, string projectTypeKey)
+		{
+			try
+			{
+				var response = new Utility().GetClient(Credentials).GetAsync($"project/type/{projectTypeKey}/accessible").Result;
 				var responseString = response.Content.ReadAsStringAsync().Result;
 				return new JiraResult { Message = response.StatusCode != HttpStatusCode.OK ? responseString : string.Empty, Status = response.StatusCode, Data = response.StatusCode == HttpStatusCode.OK ? responseString : string.Empty };
 			}
