@@ -11,7 +11,7 @@ namespace Decisions.Jira
 	[AutoRegisterMethodsOnClass(true, "Integration/Jira/Projects")]
 	public static class Project
     {
-         public static JiraResult Create(JiraCredentials Credentials, JiraProjectModel NewProject)
+         public static JiraResult CreateProject(JiraCredentials Credentials, JiraProjectModel NewProject)
 		{
 			try
 			{
@@ -32,7 +32,7 @@ namespace Decisions.Jira
 			}
 		}
 
-		public static JiraResult Edit(JiraCredentials Credentials, JiraProjectModel ProjectModel)
+		public static JiraResult EditProject(JiraCredentials Credentials, JiraProjectModel ProjectModel)
 		{
 			try
 			{
@@ -53,7 +53,7 @@ namespace Decisions.Jira
 			}
 		}
 
-		public static JiraResult Delete(JiraCredentials Credentials, string ProjectIdOrKey)
+		public static JiraResult DeleteProject(JiraCredentials Credentials, string ProjectIdOrKey)
 		{
 			try
 			{

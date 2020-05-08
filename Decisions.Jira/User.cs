@@ -11,7 +11,7 @@ namespace Decisions.Jira
 	[AutoRegisterMethodsOnClass(true, "Integration/Jira/Users")]
 	public static class User
 	{
-		public static JiraResult Create(JiraCredentials Credentials, JiraUserModel JiraUserModel)
+		public static JiraResult CreateUser(JiraCredentials Credentials, JiraUserModel JiraUserModel)
 		{
 			try
 			{
@@ -49,7 +49,7 @@ namespace Decisions.Jira
 			}
 		}
 
-		public static JiraResult Edit(JiraCredentials Credentials, JiraUserModel JiraUserModel)
+		/*public static JiraResult Edit(JiraCredentials Credentials, JiraUserModel JiraUserModel)
 		{
 			try
 			{
@@ -68,7 +68,7 @@ namespace Decisions.Jira
 			{
 				throw ex;
 			}
-		}
+		}*/
 
 
 

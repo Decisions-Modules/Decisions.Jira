@@ -51,9 +51,16 @@ namespace Decisions.JiraTestSuite
         {
             return new JiraAssignProjectModel
             {
-                ProjectIdOrKey = "10000",
+                /*ProjectIdOrKey = "10000",
                 Users = new string[] { "5ea963ee9ce9ee0b8943fed2" },
-                RoleId = 10006
+                RoleId = 10006*/
+
+                /*ProjectIdOrKey = GetJiraProject().ProjectIdOrKey,
+                Users = new string[] { "5eb56717a4c57d0b8b2575d9" },
+                RoleId = 10029*/
+                ProjectIdOrKey = "10000",
+                Users = new string[] { "5eb56717a4c57d0b8b2575d9" },
+                RoleId = 10002
 
             };
         }

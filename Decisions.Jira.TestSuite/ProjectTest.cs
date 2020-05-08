@@ -11,7 +11,7 @@ namespace Decisions.JiraTestSuite
         [TestMethod]
         public void Create()
         {
-            HttpStatusCode actualStatusCode = Project.Create(TestData.GetJiraCredentials(), TestData.GetJiraProject()).Status;
+            HttpStatusCode actualStatusCode = Project.CreateProject(TestData.GetJiraCredentials(), TestData.GetJiraProject()).Status;
             HttpStatusCode expectedStatusCode = HttpStatusCode.Created;
             Assert.AreEqual(expectedStatusCode, actualStatusCode);
         }
@@ -19,12 +19,12 @@ namespace Decisions.JiraTestSuite
         public void Edit()
         {
             JiraProjectModel project = TestData.GetJiraProject();
-            Project.Create(TestData.GetJiraCredentials(), project);
+            Project.CreateProject(TestData.GetJiraCredentials(), project);
 
             project.Description = "Test Desc";
             project.Name = "Dec_wfh_1";
 
-            HttpStatusCode actualStatusCode = Project.Edit(TestData.GetJiraCredentials(), project).Status;
+            HttpStatusCode actualStatusCode = Project.EditProject(TestData.GetJiraCredentials(), project).Status;
             HttpStatusCode expectedStatusCode = HttpStatusCode.OK;
             Assert.AreEqual(expectedStatusCode, actualStatusCode);
         }
@@ -33,8 +33,8 @@ namespace Decisions.JiraTestSuite
         public void Delete()
         {
             JiraProjectModel project = TestData.GetJiraProject();
-            Project.Create(TestData.GetJiraCredentials(), project);
-            HttpStatusCode actualStatusCode = Project.Delete(TestData.GetJiraCredentials(), project.ProjectIdOrKey).Status;
+            Project.CreateProject(TestData.GetJiraCredentials(), project);
+            HttpStatusCode actualStatusCode = Project.DeleteProject(TestData.GetJiraCredentials(), project.ProjectIdOrKey).Status;
             HttpStatusCode expectedStatusCode = HttpStatusCode.NoContent;
             Assert.AreEqual(expectedStatusCode, actualStatusCode);
         }
@@ -43,7 +43,7 @@ namespace Decisions.JiraTestSuite
         public void GetProjectTypeByKey()
         {
             JiraProjectModel project = TestData.GetJiraProject();
-            Project.Create(TestData.GetJiraCredentials(), project);
+            Project.CreateProject(TestData.GetJiraCredentials(), project);
             HttpStatusCode actualStatusCode = Project.GetProjectTypeByKey(TestData.GetJiraCredentials(), project.ProjectTypeKey).Status;
             HttpStatusCode expectedStatusCode = HttpStatusCode.OK;
             Assert.AreEqual(expectedStatusCode, actualStatusCode);
@@ -53,7 +53,7 @@ namespace Decisions.JiraTestSuite
         public void GetАccessibleProjectTypeByKey()
         {
             JiraProjectModel project = TestData.GetJiraProject();
-            Project.Create(TestData.GetJiraCredentials(), project);
+            Project.CreateProject(TestData.GetJiraCredentials(), project);
             HttpStatusCode actualStatusCode = Project.GetАccessibleProjectTypeByKey(TestData.GetJiraCredentials(), project.ProjectTypeKey).Status;
             HttpStatusCode expectedStatusCode = HttpStatusCode.OK;
             Assert.AreEqual(expectedStatusCode, actualStatusCode);
