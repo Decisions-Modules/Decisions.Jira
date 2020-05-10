@@ -49,29 +49,6 @@ namespace Decisions.Jira
 			}
 		}
 
-		/*public static JiraResult Edit(JiraCredentials Credentials, JiraUserModel JiraUserModel)
-		{
-			try
-			{
-				string data = JsonConvert.SerializeObject(JiraUserModel, Formatting.None,
-							new JsonSerializerSettings
-							{
-								NullValueHandling = NullValueHandling.Ignore
-							});
-				var content =
-				new StringContent(data, Encoding.UTF8, "application/json");
-				var response = new Utility().GetClient(Credentials).PutAsync($"user/{JiraUserModel.EmailAddress}", content).Result;
-				var responseString = response.Content.ReadAsStringAsync().Result;
-				return new JiraResult { Message = response.StatusCode != HttpStatusCode.Created ? responseString : string.Empty, Status = response.StatusCode, Data = response.StatusCode == HttpStatusCode.Created ? responseString : string.Empty };
-			}
-			catch (Exception ex)
-			{
-				throw ex;
-			}
-		}*/
-
-
-
 	}
 
 }
