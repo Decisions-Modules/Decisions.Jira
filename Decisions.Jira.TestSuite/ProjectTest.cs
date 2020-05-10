@@ -11,7 +11,10 @@ namespace Decisions.JiraTestSuite
         [TestMethod]
         public void Create()
         {
-            HttpStatusCode actualStatusCode = Project.CreateProject(TestData.GetJiraCredentials(), TestData.GetJiraProject()).Status;
+            JiraProjectModel project = TestData.GetJiraProject();
+            Project.DeleteProject(TestData.GetJiraCredentials(), project.ProjectIdOrKey);
+
+            HttpStatusCode actualStatusCode = Project.CreateProject(TestData.GetJiraCredentials(), project).Status;
             HttpStatusCode expectedStatusCode = HttpStatusCode.Created;
             Assert.AreEqual(expectedStatusCode, actualStatusCode);
         }
