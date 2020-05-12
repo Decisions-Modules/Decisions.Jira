@@ -19,7 +19,7 @@ namespace Decisions.JiraTestSuite
                 Issuetype = new JiraIssueTypeModel("10001"),
                Description= " this is issue description"
             };
-            HttpStatusCode actualStatusCode = IssueSteps.Create(jiraIssue).Status;
+            HttpStatusCode actualStatusCode = IssueSteps.CreateIssue(TestData.GetJiraCredentials(), jiraIssue).Status;
             HttpStatusCode expectedStatusCode = HttpStatusCode.Created;
             Assert.AreEqual(expectedStatusCode, actualStatusCode);
         }
@@ -35,7 +35,7 @@ namespace Decisions.JiraTestSuite
                 Issuetype = new JiraIssueTypeModel("10001"),
                 Description = " this is issue description updated"
             };
-            HttpStatusCode actualStatusCode = IssueSteps.Edit(jiraIssue).Status;
+            HttpStatusCode actualStatusCode = IssueSteps.EditIssue(TestData.GetJiraCredentials(), jiraIssue).Status;
             HttpStatusCode expectedStatusCode = HttpStatusCode.NoContent;
             Assert.AreEqual(expectedStatusCode, actualStatusCode);
         }
@@ -48,7 +48,7 @@ namespace Decisions.JiraTestSuite
               DeleteSubtasks=true,
               IssueIdOrKey= "DW-7"
             };
-            HttpStatusCode actualStatusCode = IssueSteps.Delete(jiraIssueModel).Status;
+            HttpStatusCode actualStatusCode = IssueSteps.DeleteIssue(TestData.GetJiraCredentials(), jiraIssueModel).Status;
             HttpStatusCode expectedStatusCode = HttpStatusCode.NoContent;
             Assert.AreEqual(expectedStatusCode, actualStatusCode);
         }
@@ -60,7 +60,7 @@ namespace Decisions.JiraTestSuite
                 AccountId= "5ea963ee9ce9ee0b8943fed2",
                 IssueIdOrKey ="DW-6"
             };
-            HttpStatusCode actualStatusCode = IssueSteps.Assign(assign).Status;
+            HttpStatusCode actualStatusCode = IssueSteps.AssignIssue(TestData.GetJiraCredentials(), assign).Status;
             HttpStatusCode expectedStatusCode = HttpStatusCode.NoContent;
             Assert.AreEqual(expectedStatusCode, actualStatusCode);
         }

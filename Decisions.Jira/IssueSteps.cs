@@ -33,7 +33,7 @@ namespace Decisions.Jira
 			}
 		}
 
-		public static JiraResult Delete (JiraCredentials Credentials, JiraIssueDeleteModel IssueModel)
+		public static JiraResult DeleteIssue (JiraCredentials Credentials, JiraIssueDeleteModel IssueModel)
 		{
 			try
 			{
@@ -47,7 +47,7 @@ namespace Decisions.Jira
 			}
 		}
 		 
-		public static JiraResult Edit (JiraCredentials Credentials, JiraIssue Issue)
+		public static JiraResult EditIssue(JiraCredentials Credentials, JiraIssue Issue)
 		{
 			try
 			{
@@ -69,7 +69,7 @@ namespace Decisions.Jira
 			}
 		}
 		
-		public static JiraResult Assign (JiraCredentials Credentials, JiraAssignee Assign)
+		public static JiraResult AssignIssue(JiraCredentials Credentials, JiraAssignee Assign)
 		{
 			try
 			{

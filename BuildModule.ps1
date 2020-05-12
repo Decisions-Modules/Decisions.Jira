@@ -23,12 +23,21 @@ function FindMSBuild {
 	if (Test-Path -PathType leaf -LiteralPath $guess ) {
 		return $guess
 	}
+
+	$guess = Join-Path -Path ${Env:ProgramFiles(x86)} -ChildPath "\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\msbuild.exe"
+	if (Test-Path -PathType leaf -LiteralPath $guess ) {
+		return $guess
+	}
 }
 
 function FindFrameworkFiles {
 	#search sub folders for nuget acquired framework files
 	#location should include DecisionsFramework.dll DecisionsFramework.NET.dll and CoreSErviceClients.dll
 	$firstRes = (Get-ChildItem -Path . -Include "DecisionsFramework.Net.dll" -Recurse -ErrorAction SilentlyContinue | Where-Object { ($_.PSIsContainer -eq $false) -and  ( $_.Name -like "*$fileName*") }).DirectoryName
+	if (!$firstRes)
+	{
+		$firstRes = (Get-ChildItem -Path "c:\Program Files\Decisions\Decisions Services Manager" -Include "DecisionsFramework.Net.dll" -Recurse -ErrorAction SilentlyContinue | Where-Object { ($_.PSIsContainer -eq $false) -and  ( $_.Name -like "*$fileName*") }).DirectoryName
+	}
 	return $firstRes
 }
 
@@ -73,7 +82,7 @@ if (!$framework) {
 	Write-Output "Using framework found at: $framework"
 } else {
 	Write-Output "Using specified framework files location: $framework"
-	if (!Test-Path -LiteralPath $framework) {
+	if (!(Test-Path -LiteralPath $framework)) {
 		Write-Output "Checking your path for the -framework flag and could not find this path."
 		exit
 	}

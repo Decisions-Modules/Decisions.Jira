@@ -2,18 +2,18 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("Decisions.JiraTestSuite")]
+[assembly: AssemblyTitle("Decisions.Jira.TestSuite")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Decisions.JiraTestSuite")]
+[assembly: AssemblyProduct("Decisions.Jira.TestSuite")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 [assembly: ComVisible(false)]
 
-[assembly: Guid("eee5a63b-493f-4930-8535-ff6955d3c2b2")]
+[assembly: Guid("db1cbbc7-42a8-4261-9057-eb7f1238dbb4")]
 
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
