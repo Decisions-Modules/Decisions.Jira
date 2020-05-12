@@ -15,7 +15,7 @@ namespace Decisions.JiraTestSuite
             {
                 User = "ivan@grafsoft.org",
                 Password = "OCjzLDJFXlelROp1a1wj0CC0",
-                JiraURL = "https://ivankovalchuk.atlassian.net/rest/api/2/"
+                JiraURL = "https://ivankovalchuk.atlassian.net"
             };
         }
 
