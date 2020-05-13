@@ -18,6 +18,15 @@ namespace Decisions.JiraTestSuite
                 JiraURL = "https://ivankovalchuk.atlassian.net"
             };
         }
+        public static JiraCredentials GetServerJiraCredentials()
+        {
+            return new JiraCredentials
+            {
+                User = "ivan",
+                Password = "password",
+                JiraURL = "http://localhost:8080"
+            };
+        }
 
         public static JiraProjectModel GetJiraProject()
         {

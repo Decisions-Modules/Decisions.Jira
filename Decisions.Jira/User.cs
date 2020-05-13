@@ -31,6 +31,7 @@ namespace Decisions.Jira
 				throw ex;
 			}
 		}
+
 		public static JiraResult AssignProject(JiraCredentials Credentials, JiraAssignProjectModel JiraAssignmentModel)
 		{
 			try
@@ -42,6 +43,20 @@ namespace Decisions.Jira
 				var response = new Utility().GetClient(Credentials).PostAsync($"project/{JiraAssignmentModel.ProjectIdOrKey}/role/{JiraAssignmentModel.RoleId}", content).Result;
 				var responseString = response.Content.ReadAsStringAsync().Result;
 				return new JiraResult { Message = response.StatusCode != HttpStatusCode.OK ? responseString : string.Empty, Status = response.StatusCode, Data = response.StatusCode == HttpStatusCode.OK ? responseString : string.Empty };
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
+
+		public static JiraResult DeleteUser(JiraCredentials Credentials, string AccountId)
+		{
+			try
+			{
+				var response = new Utility().GetClient(Credentials).DeleteAsync($"user?accountId={AccountId}").Result;
+				var responseString = response.Content.ReadAsStringAsync().Result;
+				return new JiraResult { Message = response.StatusCode != HttpStatusCode.NoContent ? responseString : string.Empty, Status = response.StatusCode, Data = response.StatusCode == HttpStatusCode.Created ? responseString : string.Empty };
 			}
 			catch (Exception ex)
 			{

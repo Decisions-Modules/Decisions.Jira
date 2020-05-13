@@ -26,7 +26,7 @@ namespace Decisions.JiraTestSuite
                 {
                     Project.DeleteProject(TestData.GetJiraCredentials(), project.ProjectIdOrKey);
                 }
-                catch (Exception ex) { }
+                catch (Exception ex) { _ = ex.Message; }
             }
         }
 
@@ -51,7 +51,7 @@ namespace Decisions.JiraTestSuite
                 {
                     Project.DeleteProject(TestData.GetJiraCredentials(), project.ProjectIdOrKey);
                 }
-                catch (Exception ex) { }
+                catch (Exception ex) { _ = ex.Message; }
             }
         }
 
@@ -83,7 +83,7 @@ namespace Decisions.JiraTestSuite
                 {
                     Project.DeleteProject(TestData.GetJiraCredentials(), project.ProjectIdOrKey);
                 }
-                catch (Exception ex) { }
+                catch (Exception ex) { _ = ex.Message; }
             }
         }
 
@@ -104,7 +104,7 @@ namespace Decisions.JiraTestSuite
                 {
                     Project.DeleteProject(TestData.GetJiraCredentials(), project.ProjectIdOrKey);
                 }
-                catch (Exception ex) { }
+                catch (Exception ex) { _ = ex.Message; }
             }
         }
     }
