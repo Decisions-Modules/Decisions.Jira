@@ -38,7 +38,7 @@ namespace Decisions.JiraTestSuite
                 ProjectIdOrKey = "NP123",
                 ProjectTemplateKey = "com.pyxis.greenhopper.jira:gh-simplified-agility-kanban",
                 LeadAccountId = "5eb2790cb882f90bae55c19b",//"5ea1ce8c1f32260c13047996",
-                AssigneeType = "UNASSIGNED",
+                AssigneeType = ProjectLead.UNASSIGNED,
                 ProjectTypeKey = "business"
 
             };
@@ -73,5 +73,19 @@ namespace Decisions.JiraTestSuite
 
             };
         }
+
+
+        public static JiraIssue GetJiraIssue(string projectId, string jiraIssueId)
+        {
+            return new JiraIssue
+            {
+                Details = "New Issue " + DateTime.Now.ToString("ddmmyyhhss"),
+                JiraProject = new JiraIdReferenceModel(projectId),
+                Issuetype = new JiraIdReferenceModel(jiraIssueId),
+                Description = " this is issue description"
+            };
+        }
+
+
     }
 }

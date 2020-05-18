@@ -94,5 +94,28 @@ namespace Decisions.Jira
 				throw ex;
 			}
 		}
+
+		public static JiraResult getProjectMetadateByKey(JiraCredentials Credentials, string ProjectKey)
+		{
+			try
+			{
+				var response = new Utility().GetClient(Credentials).GetAsync($"issue/createmeta?projectKeys={ProjectKey}").Result;
+				var responseString = response.Content.ReadAsStringAsync().Result;
+
+				var createmeta = JsonConvert.DeserializeObject<JiraIssueCreateMetadataModel>(responseString);
+				JiraProjectMetadataModel projectMetadata = null;
+				if (createmeta.Projects.Length == 1)
+				{
+					projectMetadata = createmeta.Projects[0];
+				}
+
+				return new JiraResult { Message = response.StatusCode != HttpStatusCode.OK ? responseString : string.Empty, Status = response.StatusCode, Data = projectMetadata };
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
+
 	}
 }

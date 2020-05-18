@@ -50,15 +50,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticationManager.cs" />
+    <Compile Include="Data\JiraIssueCreateMetadataModel.cs" />
     <Compile Include="Data\JiraAssignee.cs" />
     <Compile Include="Data\JiraAssignProjectModel.cs" />
     <Compile Include="Data\JiraIssueDeleteModel.cs" />
     <Compile Include="Data\JiraIssue.cs" />
-    <Compile Include="Data\JiraIssueTypeModel.cs" />
+    <Compile Include="Data\JiraIdReferenceModel.cs" />
     <Compile Include="Data\JiraCredentials.cs" />
     <Compile Include="Data\JiraLeadReferenceModel.cs" />
     <Compile Include="Data\JiraProjectModel.cs" />
-    <Compile Include="Data\JiraProjectReferenceModel.cs" />
     <Compile Include="Data\JiraResult.cs" />
     <Compile Include="Data\JiraUserModel.cs" />
     <Compile Include="IssueSteps.cs" />
