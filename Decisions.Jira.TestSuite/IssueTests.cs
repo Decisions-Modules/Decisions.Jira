@@ -2,11 +2,13 @@
 using System.Net;
 using Decisions.Jira;
 using Decisions.Jira.Data;
+using Decisions.Jira.Data.Project;
+using Decisions.Jira.Steps;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Decisions.JiraTestSuite
 {
-    [TestClass]
+   /* [TestClass]
     public class IssueTests
     {
         [TestMethod]
@@ -16,8 +18,8 @@ namespace Decisions.JiraTestSuite
             JiraCredentials creditials = TestData.GetJiraCredentials();
             try
             {
-                Project.CreateProject(creditials, project);
-                var result = Project.getProjectMetadateByKey(creditials, project.Key);
+                ProjectSteps.CreateProject(creditials, project);
+                var result = ProjectSteps.getProjectMetadateByKey(creditials, project.Key);
                 JiraProjectMetadataModel projectMetadata = (JiraProjectMetadataModel)result.Data;
 
                 var issue = TestData.GetJiraIssue(projectMetadata.Id, projectMetadata.Issuetypes[0].Id);
@@ -31,7 +33,7 @@ namespace Decisions.JiraTestSuite
             {
                 try
                 {
-                    Project.DeleteProject(creditials, project.ProjectIdOrKey);
+                    ProjectSteps.DeleteProject(creditials, project.ProjectIdOrKey);
                 }
                 catch (Exception ex) { _ = ex.Message; }
             }
@@ -41,23 +43,23 @@ namespace Decisions.JiraTestSuite
         [TestMethod]
         public void Edit()
         {
-            /* JiraIssue jiraIssue = new JiraIssue
-             {
-                 IssueIdOrKey = "DW-3",
-                 Details = "New Issue " + DateTime.Now.ToString("ddmmyyhhss"),
-                 JiraProject = new JiraProjectReferenceModel("10000"),
-                 Issuetype = new JiraIssueTypeModel("10001"),
-                 Description = " this is issue description updated"
-             };
-             HttpStatusCode actualStatusCode = IssueSteps.EditIssue(TestData.GetJiraCredentials(), jiraIssue).Status;
-             HttpStatusCode expectedStatusCode = HttpStatusCode.NoContent;
-             Assert.AreEqual(expectedStatusCode, actualStatusCode);*/
+            // JiraIssue jiraIssue = new JiraIssue
+            // {
+            //     IssueIdOrKey = "DW-3",
+            //     Details = "New Issue " + DateTime.Now.ToString("ddmmyyhhss"),
+            //     JiraProject = new JiraProjectReferenceModel("10000"),
+            //     Issuetype = new JiraIssueTypeModel("10001"),
+            //     Description = " this is issue description updated"
+            // };
+            // HttpStatusCode actualStatusCode = IssueSteps.EditIssue(TestData.GetJiraCredentials(), jiraIssue).Status;
+            // HttpStatusCode expectedStatusCode = HttpStatusCode.NoContent;
+            // Assert.AreEqual(expectedStatusCode, actualStatusCode);
             JiraProjectModel project = TestData.GetJiraProject();
             JiraCredentials creditials = TestData.GetJiraCredentials();
             try
             {
-                Project.CreateProject(creditials, project);
-                var result = Project.getProjectMetadateByKey(creditials, project.Key);
+                ProjectSteps.CreateProject(creditials, project);
+                var result = ProjectSteps.getProjectMetadateByKey(creditials, project.Key);
                 JiraProjectMetadataModel projectMetadata = (JiraProjectMetadataModel)result.Data;
 
                 var issue = TestData.GetJiraIssue(projectMetadata.Id, projectMetadata.Issuetypes[0].Id);
@@ -72,7 +74,7 @@ namespace Decisions.JiraTestSuite
             {
                 try
                 {
-                    Project.DeleteProject(creditials, project.ProjectIdOrKey);
+                    ProjectSteps.DeleteProject(creditials, project.ProjectIdOrKey);
                 }
                 catch (Exception ex) { _ = ex.Message; }
             }
@@ -104,5 +106,5 @@ namespace Decisions.JiraTestSuite
             Assert.AreEqual(expectedStatusCode, actualStatusCode);
         }
 
-    }
+    }*/
 }

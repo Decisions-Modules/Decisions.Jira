@@ -9,14 +9,12 @@ using System.Threading.Tasks;
 
 namespace Decisions.Jira.Data
 {
-    [DataContract]
+  /*  [DataContract]
     class JiraIssueCreateMetadataModel
     {
         [DataMember]
         [JsonProperty(PropertyName = "projects")]
         public JiraProjectMetadataModel[] Projects { get; set; }
-
-
     }
 
     [DataContract]
@@ -64,5 +62,5 @@ namespace Decisions.Jira.Data
         [DataMember]
         [JsonProperty(PropertyName = "subtask")]
         public Boolean Subtask { get; set; }
-    }
+    }*/
 }

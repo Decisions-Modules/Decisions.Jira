@@ -2,6 +2,9 @@
 using System.Net;
 using Decisions.Jira;
 using Decisions.Jira.Data;
+using Decisions.Jira.Data.Project;
+using Decisions.Jira.Data.User;
+using Decisions.Jira.Steps;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Decisions.JiraTestSuite
@@ -10,21 +13,27 @@ namespace Decisions.JiraTestSuite
     public class ProjectTests
     {
 
+        JiraCredentials Credential { get{ return TestData.GetJiraCredentials(); } }
+
         [TestMethod]
         public void Create()
         {
-            JiraProjectModel project = TestData.GetJiraProject();
+            var newUser = TestData.GetJiraUser();
+            JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
+
+            JiraProjectModel project = TestData.GetJiraProject(createUserResult.Data);
             try
             {
-                HttpStatusCode actualStatusCode = Project.CreateProject(TestData.GetJiraCredentials(), project).Status;
-                HttpStatusCode expectedStatusCode = HttpStatusCode.Created;
-                Assert.AreEqual(expectedStatusCode, actualStatusCode);
+                var response = ProjectSteps.CreateProject(Credential, project);
+                Assert.AreEqual(response.Status, JiraResultStatus.Success);
             }
             finally
             {
                 try
                 {
-                    Project.DeleteProject(TestData.GetJiraCredentials(), project.ProjectIdOrKey);
+                    ProjectSteps.DeleteProject(Credential, project.ProjectIdOrKey);
+                    UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId); // for Jira Cloud
+                    UserSteps.DeleteUser(Credential, createUserResult.Data.Key); // for Jira server
                 }
                 catch (Exception ex) { _ = ex.Message; }
             }
@@ -33,23 +42,28 @@ namespace Decisions.JiraTestSuite
         [TestMethod]
         public void Edit()
         {
-            JiraProjectModel project = TestData.GetJiraProject();
+            var newUser = TestData.GetJiraUser();
+            JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
+
+            JiraProjectModel project = TestData.GetJiraProject(createUserResult.Data);
+
             try
             {
-                Project.CreateProject(TestData.GetJiraCredentials(), project);
+                var createResponse = ProjectSteps.CreateProject(Credential, project);
 
                 project.Description = "Test Desc";
                 project.Name = "Dec_wfh_1";
 
-                HttpStatusCode actualStatusCode = Project.EditProject(TestData.GetJiraCredentials(), project).Status;
-                HttpStatusCode expectedStatusCode = HttpStatusCode.OK;
-                Assert.AreEqual(expectedStatusCode, actualStatusCode);
+                var editResponse = ProjectSteps.EditProject(Credential, project);
+                Assert.AreEqual(editResponse.Status, JiraResultStatus.Success);
             }
             finally
             {
                 try
                 {
-                    Project.DeleteProject(TestData.GetJiraCredentials(), project.ProjectIdOrKey);
+                    ProjectSteps.DeleteProject(Credential, project.ProjectIdOrKey);
+                    UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId); // for Jira Cloud
+                    UserSteps.DeleteUser(Credential, createUserResult.Data.Key); // for Jira server
                 }
                 catch (Exception ex) { _ = ex.Message; }
             }
@@ -58,30 +72,40 @@ namespace Decisions.JiraTestSuite
         [TestMethod]
         public void Delete()
         {
-            JiraProjectModel project = TestData.GetJiraProject();
-            Project.CreateProject(TestData.GetJiraCredentials(), project);
-            HttpStatusCode actualStatusCode = Project.DeleteProject(TestData.GetJiraCredentials(), project.ProjectIdOrKey).Status;
-            HttpStatusCode expectedStatusCode = HttpStatusCode.NoContent;
-            Assert.AreEqual(expectedStatusCode, actualStatusCode);
+            var newUser = TestData.GetJiraUser();
+            JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
+
+            JiraProjectModel project = TestData.GetJiraProject(createUserResult.Data);
+
+            ProjectSteps.CreateProject(Credential, project);
+            var deleteResponse = ProjectSteps.DeleteProject(Credential, project.ProjectIdOrKey);
+            Assert.AreEqual(deleteResponse.Status, JiraResultStatus.Success);
+
+            UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId); // for Jira Cloud
+            UserSteps.DeleteUser(Credential, createUserResult.Data.Key); // for Jira server
         }
 
         [TestMethod]
         public void GetProjectTypeByKey()
         {
-            JiraProjectModel project = TestData.GetJiraProject();
+            var newUser = TestData.GetJiraUser();
+            JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
+
+            JiraProjectModel project = TestData.GetJiraProject(createUserResult.Data);
             try
             {
-                Project.CreateProject(TestData.GetJiraCredentials(), project);
+                ProjectSteps.CreateProject(Credential, project);
 
-                HttpStatusCode actualStatusCode = Project.GetProjectTypeByKey(TestData.GetJiraCredentials(), project.ProjectTypeKey).Status;
-                HttpStatusCode expectedStatusCode = HttpStatusCode.OK;
-                Assert.AreEqual(expectedStatusCode, actualStatusCode);
+                var response = ProjectSteps.GetProjectTypeByKey(Credential, project.ProjectTypeKey);
+                Assert.AreEqual(response.Status, JiraResultStatus.Success);
             }
             finally
             {
                 try
                 {
-                    Project.DeleteProject(TestData.GetJiraCredentials(), project.ProjectIdOrKey);
+                    ProjectSteps.DeleteProject(Credential, project.ProjectIdOrKey);
+                    UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId); // for Jira Cloud
+                    UserSteps.DeleteUser(Credential, createUserResult.Data.Key); // for Jira server
                 }
                 catch (Exception ex) { _ = ex.Message; }
             }
@@ -90,19 +114,49 @@ namespace Decisions.JiraTestSuite
         [TestMethod]
         public void GetАccessibleProjectTypeByKey()
         {
-            JiraProjectModel project = TestData.GetJiraProject();
+            var newUser = TestData.GetJiraUser();
+            JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
+            JiraProjectModel project = TestData.GetJiraProject(createUserResult.Data);
+
             try
             {
-                Project.CreateProject(TestData.GetJiraCredentials(), project);
-                HttpStatusCode actualStatusCode = Project.GetАccessibleProjectTypeByKey(TestData.GetJiraCredentials(), project.ProjectTypeKey).Status;
-                HttpStatusCode expectedStatusCode = HttpStatusCode.OK;
-                Assert.AreEqual(expectedStatusCode, actualStatusCode);
+                ProjectSteps.CreateProject(Credential, project);
+
+                var response = ProjectSteps.GetАccessibleProjectTypeByKey(Credential, project.ProjectTypeKey);
+                Assert.AreEqual(response.Status, JiraResultStatus.Success);
             }
             finally
             {
                 try
                 {
-                    Project.DeleteProject(TestData.GetJiraCredentials(), project.ProjectIdOrKey);
+                    ProjectSteps.DeleteProject(Credential, project.ProjectIdOrKey);
+                    UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId); // for Jira Cloud
+                    UserSteps.DeleteUser(Credential, createUserResult.Data.Key); // for Jira server
+                }
+                catch (Exception ex) { _ = ex.Message; }
+            }
+        }
+
+        [TestMethod]
+        public void GetProjectRoles()
+        {
+            var newUser = TestData.GetJiraUser();
+            JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
+            JiraProjectModel project = TestData.GetJiraProject(createUserResult.Data);
+            try
+            {
+                ProjectSteps.CreateProject(Credential, project);
+
+                var response = ProjectSteps.GetProjectRoles(Credential);
+                Assert.AreEqual(response.Status, JiraResultStatus.Success);
+            }
+            finally
+            {
+                try
+                {
+                    ProjectSteps.DeleteProject(Credential, project.ProjectIdOrKey);
+                    UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId); // for Jira Cloud
+                    UserSteps.DeleteUser(Credential, createUserResult.Data.Key); // for Jira server
                 }
                 catch (Exception ex) { _ = ex.Message; }
             }

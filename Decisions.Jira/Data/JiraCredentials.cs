@@ -1,8 +1,18 @@
 ﻿using DecisionsFramework.Design.Properties;
+using System.ComponentModel;
 using System.Runtime.Serialization;
 
 namespace Decisions.Jira.Data
 {
+
+    public enum JiraConnectionType
+    {
+        [Description("Self Hosted Server")]
+        JiraServer,
+        [Description("Jira Cloud")]
+        JiraCloud
+    };
+
     [DataContract]
     public class JiraCredentials
     {
@@ -18,5 +28,9 @@ namespace Decisions.Jira.Data
         [SelectStringEditorAttribute(new string[] { @"https://YOURNAME.atlassian.net"})]
         [PropertyClassificationAttribute("Jira URL", 3)]
         public string JiraURL { get; set; }
+
+        [DataMember]
+        [PropertyClassificationAttribute("Jira Connection Type", 4)]
+        public JiraConnectionType JiraConnection { get; set; }
     }
 }

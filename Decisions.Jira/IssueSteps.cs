@@ -23,7 +23,7 @@ namespace Decisions.Jira
 							}); 
 				var content =
 				new StringContent(data, Encoding.UTF8, "application/json"); 
-				var response = new Utility().GetClient(Credentials).PostAsync("issue", content).Result;
+				var response = new JiraUtility().GetClient(Credentials).PostAsync("issue", content).Result;
 				var responseString = response.Content.ReadAsStringAsync ().Result;
 				return new JiraResult { Message = response.StatusCode!=HttpStatusCode.Created? responseString:string.Empty, Status = response.StatusCode,Data = response.StatusCode==HttpStatusCode.Created?responseString:string.Empty };
 			}
@@ -37,7 +37,7 @@ namespace Decisions.Jira
 		{
 			try
 			{
-				 var response =  new Utility().GetClient(Credentials).DeleteAsync($"issue/{IssueModel.IssueIdOrKey}?deleteSubtasks={IssueModel.DeleteSubtasks}").Result;
+				 var response =  new JiraUtility().GetClient(Credentials).DeleteAsync($"issue/{IssueModel.IssueIdOrKey}?deleteSubtasks={IssueModel.DeleteSubtasks}").Result;
 				var responseString = response.Content.ReadAsStringAsync ().Result;
 				return new JiraResult { Message = response.StatusCode != HttpStatusCode.NoContent ? responseString : string.Empty, Status = response.StatusCode, Data = response.StatusCode == HttpStatusCode.NoContent ? responseString : string.Empty };
 			}
@@ -59,7 +59,7 @@ namespace Decisions.Jira
 							});
 				var content =
 				new StringContent(data, Encoding.UTF8, "application/json");
-				var response =   new Utility().GetClient(Credentials).PutAsync ($"issue/{Issue.IssueIdOrKey}", content).Result;
+				var response =   new JiraUtility().GetClient(Credentials).PutAsync ($"issue/{Issue.IssueIdOrKey}", content).Result;
 				var responseString =   response.Content.ReadAsStringAsync().Result;
 				return new JiraResult { Message = response.StatusCode != HttpStatusCode.NoContent ? responseString : string.Empty, Status = response.StatusCode, Data = response.StatusCode == HttpStatusCode.NoContent? responseString : string.Empty };
 			}
@@ -77,7 +77,7 @@ namespace Decisions.Jira
 				string data = JsonConvert.SerializeObject(DataObj);
 				var content =
 				new StringContent(data, Encoding.UTF8, "application/json");
-				var response =   new Utility().GetClient(Credentials).PutAsync($"issue/{Assign.IssueIdOrKey}/assignee", content).Result;
+				var response =   new JiraUtility().GetClient(Credentials).PutAsync($"issue/{Assign.IssueIdOrKey}/assignee", content).Result;
 				var responseString =   response.Content.ReadAsStringAsync().Result;
 				return new JiraResult { Message = response.StatusCode != HttpStatusCode.NoContent ? responseString : string.Empty, Status = response.StatusCode, Data = response.StatusCode == HttpStatusCode.NoContent? responseString : string.Empty };
 			}
