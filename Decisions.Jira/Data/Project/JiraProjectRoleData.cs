@@ -68,7 +68,7 @@ namespace Decisions.Jira.Data.Project
     }
 
 
-        [DataContract]
+    [DataContract]
     public class JiraProjectRolesResponseModel
     {
         [DataMember]
@@ -114,6 +114,7 @@ namespace Decisions.Jira.Data.Project
         {
             ErrorMessage = source.ErrorMessage;
             Status = source.Status;
+            HttpStatus = source.HttpStatus;
 
             var list = (List < JiraProjectRolesResponseModel >)source.Data;
             Data = list.ToArray();

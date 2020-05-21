@@ -195,15 +195,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticationManager.cs" />
+    <Compile Include="Data\Issue\CreateJiraIssueData.cs" />
+    <Compile Include="Data\Issue\DeleteJiraIssueData.cs" />
+    <Compile Include="Data\Issue\AssignJiraIssueData.cs" />
     <Compile Include="Data\JiraAvatarUrlsModel.cs" />
-    <Compile Include="Data\JiraBaseObject.cs" />
-    <Compile Include="Data\JiraEmptyModel.cs" />
-    <Compile Include="Data\JiraIssueCreateMetadataModel.cs" />
-    <Compile Include="Data\JiraAssignee.cs" />
+    <Compile Include="Data\JiraBaseResponseModel.cs" />
+    <Compile Include="Data\JiraEmptyResponseModel.cs" />
     <Compile Include="Data\Project\JiraProjectRoleData.cs" />
     <Compile Include="Data\User\JiraAssignProjectModel.cs" />
-    <Compile Include="Data\JiraIssueDeleteModel.cs" />
-    <Compile Include="Data\JiraIssue.cs" />
     <Compile Include="Data\JiraIdReferenceModel.cs" />
     <Compile Include="Data\JiraCredentials.cs" />
     <Compile Include="Data\JiraLeadReferenceModel.cs" />
@@ -216,10 +215,9 @@
     <Compile Include="IssueSteps.cs" />
     <Compile Include="JiraSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="serverApi\ServerUser.cs" />
+    <Compile Include="Steps\IssueSteps.cs" />
     <Compile Include="Steps\ProjectSteps.cs" />
     <Compile Include="Steps\UserSteps.cs" />
-    <Compile Include="UserSteps.cs" />
     <Compile Include="JiraUtility.cs" />
   </ItemGroup>
   <ItemGroup />

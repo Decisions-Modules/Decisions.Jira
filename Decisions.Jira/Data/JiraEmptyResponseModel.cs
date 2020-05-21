@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Decisions.Jira.Data
 {
-    class JiraEmptyModel
+    class JiraEmptyResponseModel
     {
     }
 }

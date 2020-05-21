@@ -14,7 +14,36 @@ namespace Decisions.Jira
     {
         private const string BASEPATH = "/rest/api/2/";
 
-        public HttpClient GetClient(JiraCredentials credentials)
+        public static string[] AvailableProjectTemplateKeys
+        {
+            get
+            {
+                return new string[] {"com.pyxis.greenhopper.jira:gh-simplified-agility-kanban",
+                        "com.pyxis.greenhopper.jira:gh-simplified-agility-scrum",
+                        "com.pyxis.greenhopper.jira:gh-simplified-basic",
+                        "com.pyxis.greenhopper.jira:gh-simplified-kanban-classic",
+                        "com.pyxis.greenhopper.jira:gh-simplified-scrum-classic",
+                        "com.atlassian.servicedesk:simplified-it-service-desk",
+                        "com.atlassian.servicedesk:simplified-internal-service-desk",
+                        "com.atlassian.servicedesk:simplified-external-service-desk",
+                        "com.atlassian.servicedesk:simplified-hr-service-desk",
+                        "com.atlassian.servicedesk:simplified-facilities-service-desk",
+                        "com.atlassian.jira-core-project-templates:jira-core-simplified-content-management",
+                        "com.atlassian.jira-core-project-templates:jira-core-simplified-document-approval",
+                        "com.atlassian.jira-core-project-templates:jira-core-simplified-lead-tracking",
+                        "com.atlassian.jira-core-project-templates:jira-core-simplified-process-control",
+                        "com.atlassian.jira-core-project-templates:jira-core-simplified-procurement",
+                        "com.atlassian.jira-core-project-templates:jira-core-simplified-project-management",
+                        "com.atlassian.jira-core-project-templates:jira-core-simplified-recruitment",
+                        "com.atlassian.jira-core-project-templates:jira-core-simplified-task-tracking",
+                        "com.atlassian.jira.jira-incident-management-plugin:im-incident-management",
+                        "com.atlassian.jira-core-project-templates:jira-core-project-management" // for Jira Server
+                };
+            }
+        }
+
+
+        private HttpClient GetClient(JiraCredentials credentials)
         {
             if (credentials == null)
             {
@@ -23,6 +52,7 @@ namespace Decisions.Jira
                 credentials.JiraURL = j.JiraURL;
                 credentials.Password = j.Password;
                 credentials.User = j.UserId;
+                credentials.JiraConnection = j.JiraConnection;
             }
 
             HttpClient httpClient = new HttpClient { BaseAddress = new Uri(credentials.JiraURL.TrimEnd('/') + BASEPATH) };
@@ -33,42 +63,61 @@ namespace Decisions.Jira
             return httpClient;
         }
 
-        protected static JiraResultWithData ParseResponse<T>(HttpResponseMessage response, HttpStatusCode expectedStatus) where T : class, new()
+        private static JiraResultWithData ParseResponse<T>(HttpResponseMessage response, HttpStatusCode expectedStatus) where T : class, new()
         {
             var responseString = response.Content.ReadAsStringAsync().Result;
             var result = new JiraResultWithData()
             {
                 Status = response.StatusCode == expectedStatus ? JiraResultStatus.Success : JiraResultStatus.Fail,
+                HttpStatus = response.StatusCode,
                 ErrorMessage = response.StatusCode != expectedStatus ? responseString : string.Empty,
                 Data = response.StatusCode == expectedStatus ? JsonConvert.DeserializeObject<T>(responseString) : null
             };
 
+            if (result.Status == JiraResultStatus.Fail && result.ErrorMessage.Length == 0)
+            {
+                result.ErrorMessage = $"{{ \"error\":{response.StatusCode} }}";
+            }
+
             return result;
         }
 
-        public enum JiraHttpMethod { Post, Put }
-        public static JiraResultWithData Request<T, R>(JiraHttpMethod method, string requestUri, JiraCredentials credentials, T content, HttpStatusCode expectedStatus) where R : class, new()
+        private static string ParseRequestContent<T>(T content)
         {
             string data = JsonConvert.SerializeObject(content, Formatting.None,
-                            new JsonSerializerSettings
-                            {
-                                NullValueHandling = NullValueHandling.Ignore
-                            });
+                           new JsonSerializerSettings
+                           {
+                               NullValueHandling = NullValueHandling.Ignore
+                           });
+            return data;
+        }
+
+        public static JiraResultWithData Post<T, R>(string requestUri, JiraCredentials credentials, T content, HttpStatusCode expectedStatus) where R : class, new()
+        {
+            string data = ParseRequestContent(content);
+
             var contentStr = new StringContent(data, Encoding.UTF8, "application/json");
 
             var client = new JiraUtility().GetClient(credentials);
             HttpResponseMessage response;
 
-            switch (method)
-            {
-                case JiraHttpMethod.Post:
-                    response = client.PostAsync(requestUri, contentStr).Result;
-                    break;
-                case JiraHttpMethod.Put:
-                    response = client.PutAsync(requestUri, contentStr).Result;
-                    break;
-                default: throw new Exception("Incorrect method parameter value. Only Put or Post required");
-            };
+            response = client.PostAsync(requestUri, contentStr).Result;
+
+            var result = ParseResponse<R>(response, expectedStatus);
+
+            return result;
+        }
+
+        public static JiraResultWithData Put<T, R>(string requestUri, JiraCredentials credentials, T content, HttpStatusCode expectedStatus) where R : class, new()
+        {
+            string data = ParseRequestContent(content);
+
+            var contentStr = new StringContent(data, Encoding.UTF8, "application/json");
+
+            var client = new JiraUtility().GetClient(credentials);
+            HttpResponseMessage response;
+
+            response = client.PutAsync(requestUri, contentStr).Result;
 
             var result = ParseResponse<R>(response, expectedStatus);
 
@@ -98,13 +147,6 @@ namespace Decisions.Jira
             var responseString = response.Content.ReadAsStringAsync().Result;
 
             var result = ParseResponse<R>(response, expectedStatus);
-            /*new GeneralJiraResult()
-            {
-                HttpStatus = response.StatusCode,
-                Status = response.StatusCode == expectedStatus ? JiraRequestStatus.Success : JiraRequestStatus.Fail,
-                ErrorMessage = response.StatusCode != expectedStatus ? responseString : string.Empty,
-                Data = response.StatusCode == expectedStatus ? JsonConvert.DeserializeObject<R>(responseString) : null
-            };*/
 
             return result;
         }

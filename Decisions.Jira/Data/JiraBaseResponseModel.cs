@@ -10,7 +10,7 @@ namespace Decisions.Jira.Data
 {
 
     [DataContract]
-    public class JiraBaseObject
+    public class JiraBaseResponseModel
     {
 
         [DataMember]

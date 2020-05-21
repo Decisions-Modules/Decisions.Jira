@@ -1,4 +1,5 @@
 ﻿using Decisions.Jira.Data;
+using Decisions.Jira.Data.Issue;
 using Decisions.Jira.Data.Project;
 using Decisions.Jira.Data.User;
 using Decisions.Jira.Steps;
@@ -88,9 +89,9 @@ namespace Decisions.JiraTestSuite
         }
 
 
-        public static JiraIssue GetJiraIssue(string projectId, string jiraIssueId)
+        public static JiraIssueModel GetJiraIssue(string projectId, string jiraIssueId)
         {
-            return new JiraIssue
+            return new JiraIssueModel
             {
                 Details = "New Issue " + DateTime.Now.ToString("ddmmyyhhss"),
                 JiraProject = new JiraIdReferenceModel(projectId),

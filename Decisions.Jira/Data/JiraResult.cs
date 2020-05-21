@@ -6,7 +6,7 @@ using Newtonsoft.Json.Converters;
 
 namespace Decisions.Jira.Data
 {
-    [DataContract]
+    /*[DataContract]
     public class JiraResult
     {
         [DataMember]
@@ -16,7 +16,7 @@ namespace Decisions.Jira.Data
         
         [DataMember]
         public object Data;
-    }
+    }*/
 
     [DataContract]
     [JsonConverter(typeof(StringEnumConverter))]
@@ -30,6 +30,10 @@ namespace Decisions.Jira.Data
 
         [DataMember]
         public JiraResultStatus Status { get; set; }
+
+        [DataMember]
+        public HttpStatusCode HttpStatus { get; set; }
+
     }
 
     public class JiraResultWithData: BaseJiraResult

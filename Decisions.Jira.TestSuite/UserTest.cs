@@ -20,11 +20,11 @@ namespace Decisions.JiraTestSuite
         [TestMethod]
         public void CreateUser()
         {
-            doCreate(CloudCredential);
-            doCreate(ServerCredential);
+            DoCreate(CloudCredential);
+            DoCreate(ServerCredential);
         }
 
-        private void doCreate(JiraCredentials Credential)
+        private void DoCreate(JiraCredentials Credential)
         {
             var newUser = TestData.GetJiraUser();
             JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
@@ -37,11 +37,11 @@ namespace Decisions.JiraTestSuite
         [TestMethod]
         public void AssignProject()
         {
-            doAssignProject(CloudCredential);
-            doAssignProject(ServerCredential);
+            DoAssignProject(CloudCredential);
+            DoAssignProject(ServerCredential);
         }
 
-        private void doAssignProject(JiraCredentials Credential)
+        private void DoAssignProject(JiraCredentials Credential)
         {
             var newUser = TestData.GetJiraUser();
             JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
@@ -77,11 +77,11 @@ namespace Decisions.JiraTestSuite
         [TestMethod]
         public void DeleteUser()
         {
-            doDeleteUser(CloudCredential);
-            doDeleteUser(ServerCredential);
+            DoDeleteUser(CloudCredential);
+            DoDeleteUser(ServerCredential);
         }
 
-        private void doDeleteUser(JiraCredentials Credential)
+        private void DoDeleteUser(JiraCredentials Credential)
         {
 
             var newUser = TestData.GetJiraUser();
@@ -101,10 +101,10 @@ namespace Decisions.JiraTestSuite
         public void EditUser()
         {
             //doEditUser(CloudCredential);
-            doEditUser(ServerCredential);
+            DEditUser(ServerCredential);
         }
 
-        private void doEditUser(JiraCredentials Credential)
+        private void DEditUser(JiraCredentials Credential)
         {
             var editedUser = TestData.GetJiraUser();
             JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, editedUser);
@@ -137,9 +137,9 @@ namespace Decisions.JiraTestSuite
         public void SetUserPassword()
         {
             //doSetUserPassword(CloudCredential);
-            doSetUserPassword(ServerCredential);
+            DoSetUserPassword(ServerCredential);
         }
-        private void doSetUserPassword(JiraCredentials Credential)
+        private void DoSetUserPassword(JiraCredentials Credential)
         {
             var editedUser = TestData.GetJiraUser();
             JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, editedUser);

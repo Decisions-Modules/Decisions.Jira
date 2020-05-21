@@ -45,9 +45,14 @@ namespace Decisions.Jira.Data.Project
         [PropertyClassificationAttribute("Permission Scheme", 5)]
         public long? PermissionScheme { get; set; }
 
+        [PropertyHidden(true)]
+        [JsonIgnore]
+        public string[] AvailableProjectTemplateKeys { get { return JiraUtility.AvailableProjectTemplateKeys; } }
+
         [DataMember]
         [JsonProperty(PropertyName = "projectTemplateKey")]
-        [SelectStringEditorAttribute(new string[] {"com.pyxis.greenhopper.jira:gh-simplified-agility-kanban",
+        [SelectStringEditorAttribute("AvailableProjectTemplateKeys")]
+       /* [SelectStringEditorAttribute(new string[] {"com.pyxis.greenhopper.jira:gh-simplified-agility-kanban",
                         "com.pyxis.greenhopper.jira:gh-simplified-agility-scrum",
                         "com.pyxis.greenhopper.jira:gh-simplified-basic",
                         "com.pyxis.greenhopper.jira:gh-simplified-kanban-classic",
@@ -66,7 +71,7 @@ namespace Decisions.Jira.Data.Project
                         "com.atlassian.jira-core-project-templates:jira-core-simplified-recruitment",
                         "com.atlassian.jira-core-project-templates:jira-core-simplified-task-tracking",
                         "com.atlassian.jira.jira-incident-management-plugin:im-incident-management"
-            })]
+            })]*/
         [PropertyClassificationAttribute("Project Template Key", 6)]
         public string ProjectTemplateKey { get; set; }
 
@@ -103,24 +108,19 @@ namespace Decisions.Jira.Data.Project
     }
 
     [DataContract]
-    public class JiraCreateProjectResponseModel: JiraBaseObject
+    public class JiraCreateProjectResult : BaseJiraResult
     {
+        [DataMember]
+        public JiraBaseResponseModel Data;
+
+        public JiraCreateProjectResult() { }
+        public JiraCreateProjectResult(JiraResultWithData source)
+        {
+            ErrorMessage = source.ErrorMessage;
+            Status = source.Status;
+            HttpStatus = source.HttpStatus;
+            Data = (JiraBaseResponseModel)source.Data;
+        }
 
     }
-
-[DataContract]
-public class JiraCreateProjectResult : BaseJiraResult
-{
-    [DataMember]
-    public JiraCreateProjectResponseModel Data;
-
-    public JiraCreateProjectResult() { }
-    public JiraCreateProjectResult(JiraResultWithData source)
-    {
-        ErrorMessage = source.ErrorMessage;
-        Status = source.Status;
-        Data = (JiraCreateProjectResponseModel)source.Data;
-    }
-
-}
 }

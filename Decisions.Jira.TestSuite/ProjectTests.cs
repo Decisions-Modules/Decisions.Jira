@@ -1,11 +1,9 @@
-﻿using System;
-using System.Net;
-using Decisions.Jira;
-using Decisions.Jira.Data;
+﻿using Decisions.Jira.Data;
 using Decisions.Jira.Data.Project;
 using Decisions.Jira.Data.User;
 using Decisions.Jira.Steps;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace Decisions.JiraTestSuite
 {
@@ -16,18 +14,36 @@ namespace Decisions.JiraTestSuite
         JiraCredentials CloudCredential { get { return TestData.GetJiraCredentials(); } }
         JiraCredentials ServerCredential { get { return TestData.GetServerJiraCredentials(); } }
 
+        private JiraUserModel newUser;
+        private JiraCreateUserResult createUserResult;
+
+        private void CreateEntities(JiraCredentials Credential)
+        {
+            newUser = TestData.GetJiraUser();
+            createUserResult = UserSteps.CreateUser(Credential, newUser);
+        }
+
+        private void DeleteEntities(JiraCredentials Credential)
+        {
+            try
+            {
+                UserSteps.DeleteUser(Credential, createUserResult.Data.Key); // for Jira server
+                UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId); // for Jira cloud
+            }
+            catch (Exception ex) { _ = ex.Message; }
+        }
+
+
         [TestMethod]
         public void Create()
         {
-            doCreate(CloudCredential);
-            doCreate(ServerCredential);
+            DoCreate(CloudCredential);
+            DoCreate(ServerCredential);
         }
 
-        private void doCreate(JiraCredentials Credential)
+        private void DoCreate(JiraCredentials Credential)
         {
-            var newUser = TestData.GetJiraUser();
-            JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
-
+            CreateEntities(Credential);
             JiraProjectModel project = TestData.GetJiraProject(createUserResult.Data);
             try
             {
@@ -36,26 +52,20 @@ namespace Decisions.JiraTestSuite
             }
             finally
             {
-                try
-                {
                     ProjectSteps.DeleteProject(Credential, project.ProjectIdOrKey);
-                    UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId); // for Jira Cloud
-                    UserSteps.DeleteUser(Credential, createUserResult.Data.Key); // for Jira server
-                }
-                catch (Exception ex) { _ = ex.Message; }
+                    DeleteEntities(Credential);
             }
         }
 
         [TestMethod]
         public void Edit()
         {
-            doEdit(CloudCredential);
-            doEdit(ServerCredential);
+            DoEdit(CloudCredential);
+            DoEdit(ServerCredential);
         }
-        private void doEdit(JiraCredentials Credential)
+        private void DoEdit(JiraCredentials Credential)
         {
-            var newUser = TestData.GetJiraUser();
-            JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
+            CreateEntities(Credential);
 
             JiraProjectModel project = TestData.GetJiraProject(createUserResult.Data);
 
@@ -71,48 +81,43 @@ namespace Decisions.JiraTestSuite
             }
             finally
             {
-                try
-                {
                     ProjectSteps.DeleteProject(Credential, project.ProjectIdOrKey);
-                    UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId); // for Jira Cloud
-                    UserSteps.DeleteUser(Credential, createUserResult.Data.Key); // for Jira server
-                }
-                catch (Exception ex) { _ = ex.Message; }
+                    DeleteEntities(Credential);
             }
         }
 
         [TestMethod]
         public void Delete()
         {
-            doDelete(CloudCredential);
-            doDelete(ServerCredential);
+            DoDelete(CloudCredential);
+            DoDelete(ServerCredential);
         }
-        private void doDelete(JiraCredentials Credential)
+        private void DoDelete(JiraCredentials Credential)
         {
-            var newUser = TestData.GetJiraUser();
-            JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
-
+            CreateEntities(Credential);
             JiraProjectModel project = TestData.GetJiraProject(createUserResult.Data);
-
-            ProjectSteps.CreateProject(Credential, project);
-            var deleteResponse = ProjectSteps.DeleteProject(Credential, project.ProjectIdOrKey);
-            Assert.AreEqual(deleteResponse.Status, JiraResultStatus.Success);
-
-            UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId); // for Jira Cloud
-            UserSteps.DeleteUser(Credential, createUserResult.Data.Key); // for Jira server
+            try
+            {
+                ProjectSteps.CreateProject(Credential, project);
+                var deleteResponse = ProjectSteps.DeleteProject(Credential, project.ProjectIdOrKey);
+                Assert.AreEqual(deleteResponse.Status, JiraResultStatus.Success);
+            }
+            finally
+            {
+                ProjectSteps.DeleteProject(Credential, project.ProjectIdOrKey);
+                DeleteEntities(Credential);
+            }
         }
 
         [TestMethod]
         public void GetProjectTypeByKey() 
         {
-            doGetProjectTypeByKey(CloudCredential);
-            doGetProjectTypeByKey(ServerCredential);
+            DoGetProjectTypeByKey(CloudCredential);
+            DoGetProjectTypeByKey(ServerCredential);
         }
-        private void doGetProjectTypeByKey(JiraCredentials Credential)
+        private void DoGetProjectTypeByKey(JiraCredentials Credential)
         {
-            var newUser = TestData.GetJiraUser();
-            JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
-
+            CreateEntities(Credential);
             JiraProjectModel project = TestData.GetJiraProject(createUserResult.Data);
             try
             {
@@ -123,25 +128,19 @@ namespace Decisions.JiraTestSuite
             }
             finally
             {
-                try
-                {
-                    ProjectSteps.DeleteProject(Credential, project.ProjectIdOrKey);
-                    UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId); // for Jira Cloud
-                    UserSteps.DeleteUser(Credential, createUserResult.Data.Key); // for Jira server
-                }
-                catch (Exception ex) { _ = ex.Message; }
+                ProjectSteps.DeleteProject(Credential, project.ProjectIdOrKey);
+                DeleteEntities(Credential);
             }
         }
 
         [TestMethod]
         public void GetАccessibleProjectTypeByKey() {
-            doGetАccessibleProjectTypeByKey(CloudCredential);
-            doGetАccessibleProjectTypeByKey(ServerCredential);
+            DoGetАccessibleProjectTypeByKey(CloudCredential);
+            DoGetАccessibleProjectTypeByKey(ServerCredential);
         }
-        private void doGetАccessibleProjectTypeByKey( JiraCredentials Credential)
+        private void DoGetАccessibleProjectTypeByKey( JiraCredentials Credential)
         {
-            var newUser = TestData.GetJiraUser();
-            JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
+            CreateEntities(Credential);
             JiraProjectModel project = TestData.GetJiraProject(createUserResult.Data);
 
             try
@@ -153,26 +152,20 @@ namespace Decisions.JiraTestSuite
             }
             finally
             {
-                try
-                {
                     ProjectSteps.DeleteProject(Credential, project.ProjectIdOrKey);
-                    UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId); // for Jira Cloud
-                    UserSteps.DeleteUser(Credential, createUserResult.Data.Key); // for Jira server
-                }
-                catch (Exception ex) { _ = ex.Message; }
+                    DeleteEntities(Credential);
             }
         }
 
         [TestMethod]
         public void GetProjectRoles() 
         {
-            doGetProjectRoles(CloudCredential);
-            doGetProjectRoles(ServerCredential);
+            DoGetProjectRoles(CloudCredential);
+            DoGetProjectRoles(ServerCredential);
         }
-        private void doGetProjectRoles( JiraCredentials Credential)
+        private void DoGetProjectRoles( JiraCredentials Credential)
         {
-            var newUser = TestData.GetJiraUser();
-            JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
+            CreateEntities(Credential);
             JiraProjectModel project = TestData.GetJiraProject(createUserResult.Data);
             try
             {
@@ -183,13 +176,8 @@ namespace Decisions.JiraTestSuite
             }
             finally
             {
-                try
-                {
-                    ProjectSteps.DeleteProject(Credential, project.ProjectIdOrKey);
-                    UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId); // for Jira Cloud
-                    UserSteps.DeleteUser(Credential, createUserResult.Data.Key); // for Jira server
-                }
-                catch (Exception ex) { _ = ex.Message; }
+                ProjectSteps.DeleteProject(Credential, project.ProjectIdOrKey);
+                DeleteEntities(Credential);
             }
         }
     }

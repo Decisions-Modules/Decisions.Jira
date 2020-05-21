@@ -2,40 +2,69 @@
 using System.Net;
 using Decisions.Jira;
 using Decisions.Jira.Data;
+using Decisions.Jira.Data.Issue;
 using Decisions.Jira.Data.Project;
+using Decisions.Jira.Data.User;
 using Decisions.Jira.Steps;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Decisions.JiraTestSuite
 {
-   /* [TestClass]
+
+    [TestClass]
     public class IssueTests
     {
+        private JiraCredentials CloudCredential { get { return TestData.GetJiraCredentials(); } }
+        private JiraCredentials ServerCredential { get { return TestData.GetServerJiraCredentials(); } }
+
+        private JiraUserModel newUser;
+        private JiraCreateUserResult createUserResult;
+        private JiraProjectModel project;
+        private JiraCreateProjectResult createProjectResult;
+
+        private void CreateEntities(JiraCredentials Credential)
+        {
+            newUser = TestData.GetJiraUser();
+            createUserResult = UserSteps.CreateUser(Credential, newUser);
+            project = TestData.GetJiraProject(createUserResult.Data);
+            createProjectResult = ProjectSteps.CreateProject(Credential, project);
+        }
+
+        private void DeleteEntities(JiraCredentials Credential)
+        {
+            try
+            {
+                ProjectSteps.DeleteProject(Credential, project.ProjectIdOrKey);
+                UserSteps.DeleteUser(Credential, createUserResult.Data.Key); // for Jira server
+                UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId); // for Jira cloud
+            }
+            catch (Exception ex) { _ = ex.Message; }
+        }
+
+
         [TestMethod]
         public void Create()
         {
-            JiraProjectModel project = TestData.GetJiraProject();
-            JiraCredentials creditials = TestData.GetJiraCredentials();
+            DoCreate(CloudCredential);
+            DoCreate(ServerCredential);
+        }
+
+        private void DoCreate(JiraCredentials Credential)
+        {
+            CreateEntities(Credential);
+
             try
             {
-                ProjectSteps.CreateProject(creditials, project);
-                var result = ProjectSteps.getProjectMetadateByKey(creditials, project.Key);
-                JiraProjectMetadataModel projectMetadata = (JiraProjectMetadataModel)result.Data;
+                var result = ProjectSteps.GetProjectMetadateByKey(Credential, project.Key);
+                JiraProjectMetadataModel projectMetadata = result.Data;
 
                 var issue = TestData.GetJiraIssue(projectMetadata.Id, projectMetadata.Issuetypes[0].Id);
-
-                HttpStatusCode actualStatusCode = IssueSteps.CreateIssue(creditials, issue).Status;
-                HttpStatusCode expectedStatusCode = HttpStatusCode.Created;
-                Assert.AreEqual(expectedStatusCode, actualStatusCode);
-
+                JiraCreateIssueResult CreateResult = IssueSteps.CreateIssue(Credential, issue);
+                Assert.AreEqual(CreateResult.Status, JiraResultStatus.Success);
             }
             finally
             {
-                try
-                {
-                    ProjectSteps.DeleteProject(creditials, project.ProjectIdOrKey);
-                }
-                catch (Exception ex) { _ = ex.Message; }
+                DeleteEntities(Credential);
             }
 
         }
@@ -43,68 +72,97 @@ namespace Decisions.JiraTestSuite
         [TestMethod]
         public void Edit()
         {
-            // JiraIssue jiraIssue = new JiraIssue
-            // {
-            //     IssueIdOrKey = "DW-3",
-            //     Details = "New Issue " + DateTime.Now.ToString("ddmmyyhhss"),
-            //     JiraProject = new JiraProjectReferenceModel("10000"),
-            //     Issuetype = new JiraIssueTypeModel("10001"),
-            //     Description = " this is issue description updated"
-            // };
-            // HttpStatusCode actualStatusCode = IssueSteps.EditIssue(TestData.GetJiraCredentials(), jiraIssue).Status;
-            // HttpStatusCode expectedStatusCode = HttpStatusCode.NoContent;
-            // Assert.AreEqual(expectedStatusCode, actualStatusCode);
-            JiraProjectModel project = TestData.GetJiraProject();
-            JiraCredentials creditials = TestData.GetJiraCredentials();
+            DoEdit(CloudCredential);
+            DoEdit(ServerCredential);
+        }
+
+        private void DoEdit(JiraCredentials Credential)
+        {
+            CreateEntities(Credential);
             try
             {
-                ProjectSteps.CreateProject(creditials, project);
-                var result = ProjectSteps.getProjectMetadateByKey(creditials, project.Key);
-                JiraProjectMetadataModel projectMetadata = (JiraProjectMetadataModel)result.Data;
+                var result = ProjectSteps.GetProjectMetadateByKey(Credential, project.Key);
+                JiraProjectMetadataModel projectMetadata = result.Data;
 
                 var issue = TestData.GetJiraIssue(projectMetadata.Id, projectMetadata.Issuetypes[0].Id);
 
-                IssueSteps.CreateIssue(creditials, issue);
+                IssueSteps.CreateIssue(Credential, issue);
 
-                HttpStatusCode actualStatusCode = IssueSteps.EditIssue(creditials, issue).Status;
-                HttpStatusCode expectedStatusCode = HttpStatusCode.NoContent;
-                Assert.AreEqual(expectedStatusCode, actualStatusCode);
+                BaseJiraResult editResult = IssueSteps.EditIssue(Credential, issue);
+                Assert.AreEqual(editResult.Status, JiraResultStatus.Success);
             }
             finally
             {
-                try
-                {
-                    ProjectSteps.DeleteProject(creditials, project.ProjectIdOrKey);
-                }
-                catch (Exception ex) { _ = ex.Message; }
+                    DeleteEntities(Credential);
             }
         }
 
         [TestMethod]
         public void Delete()
-        { 
-            JiraIssueDeleteModel jiraIssueModel = new JiraIssueDeleteModel
+        {
+            DoDelete(CloudCredential);
+            DoDelete(ServerCredential);
+        }
+
+        private void DoDelete(JiraCredentials Credential)
+        {
+            CreateEntities(Credential);
+
+            try
             {
-              DeleteSubtasks=true,
-              IssueIdOrKey= "DW-7"
-            };
-            HttpStatusCode actualStatusCode = IssueSteps.DeleteIssue(TestData.GetJiraCredentials(), jiraIssueModel).Status;
-            HttpStatusCode expectedStatusCode = HttpStatusCode.NoContent;
-            Assert.AreEqual(expectedStatusCode, actualStatusCode);
+                var result = ProjectSteps.GetProjectMetadateByKey(Credential, project.Key);
+                JiraProjectMetadataModel projectMetadata = result.Data;
+
+                var issue = TestData.GetJiraIssue(projectMetadata.Id, projectMetadata.Issuetypes[0].Id);
+                JiraCreateIssueResult CreateResult = IssueSteps.CreateIssue(Credential, issue);
+
+                JiraIssueDeleteModel deleteModel = new JiraIssueDeleteModel { IssueIdOrKey = CreateResult.Data.Id, DeleteSubtasks = true };
+                var DeleteResult = IssueSteps.DeleteIssue(Credential, deleteModel);
+
+                Assert.AreEqual(DeleteResult.Status, JiraResultStatus.Success);
+            }
+            finally
+            {
+                DeleteEntities(Credential);
+            }
+
         }
 
         [TestMethod]
         public void Assign()
-        { 
-            JiraAssignee assign = new JiraAssignee
-            {
-                AccountId= "5ea963ee9ce9ee0b8943fed2",
-                IssueIdOrKey ="DW-6"
-            };
-            HttpStatusCode actualStatusCode = IssueSteps.AssignIssue(TestData.GetJiraCredentials(), assign).Status;
-            HttpStatusCode expectedStatusCode = HttpStatusCode.NoContent;
-            Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        {
+            DoAssign(CloudCredential);
+            DoAssign(ServerCredential);
         }
 
-    }*/
+        private void DoAssign(JiraCredentials Credential)
+        {
+            CreateEntities(Credential);
+
+            try
+            {
+                var result = ProjectSteps.GetProjectMetadateByKey(Credential, project.Key);
+                JiraProjectMetadataModel projectMetadata = result.Data;
+
+                var issue = TestData.GetJiraIssue(projectMetadata.Id, projectMetadata.Issuetypes[0].Id);
+                JiraCreateIssueResult CreateIssueResult = IssueSteps.CreateIssue(Credential, issue);
+
+                JiraAssigneeModel Assign = new JiraAssigneeModel
+                {
+                    AccountId = createUserResult.Data.AccountId,
+                    Key = createUserResult.Data.Key,
+                    IssueIdOrKey = CreateIssueResult.Data.Key
+                };
+
+                BaseJiraResult AssigneResult = IssueSteps.AssignIssue(Credential, Assign);
+                Assert.AreEqual(AssigneResult.Status, JiraResultStatus.Success);
+            }
+            finally
+            {
+                DeleteEntities(Credential);
+            }
+
+        }
+
+    }
 }

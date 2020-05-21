@@ -17,7 +17,7 @@ namespace Decisions.Jira.Steps
 		{
 			try
 			{
-				var response = JiraUtility.Request<JiraProjectModel, JiraCreateProjectResponseModel>(JiraUtility.JiraHttpMethod.Post, "project", Credentials, NewProject, HttpStatusCode.Created);
+				var response = JiraUtility.Post<JiraProjectModel, JiraBaseResponseModel>("project", Credentials, NewProject, HttpStatusCode.Created);
 				return new JiraCreateProjectResult(response);
 			}
 			catch (Exception ex)
@@ -46,8 +46,7 @@ namespace Decisions.Jira.Steps
 		{
 			try
 			{
-				var response = JiraUtility.Request<JiraProjectModel, JiraEditProjectResponseModel>(JiraUtility.JiraHttpMethod.Put, $"project/{ProjectModel.ProjectIdOrKey}",
-																								   Credentials, ProjectModel, HttpStatusCode.OK);
+				var response = JiraUtility.Put<JiraProjectModel, JiraEditProjectResponseModel>($"project/{ProjectModel.ProjectIdOrKey}", Credentials, ProjectModel, HttpStatusCode.OK);
 				return new JiraEditProjectResult(response);
 			}
 			catch (Exception ex)
@@ -57,16 +56,16 @@ namespace Decisions.Jira.Steps
 			}
 		}
 
-		public static JiraProjectMetadataResult getProjectMetadateByKey(JiraCredentials Credentials, string projectTypeKey)
+		public static JiraProjectMetadataResult GetProjectMetadateByKey(JiraCredentials Credentials, string ProjectKey)
 		{
 			try
 			{
-				var response = JiraUtility.Get<JiraProjectMetadataResponseModel>($"project/type/{projectTypeKey}", Credentials);
+				var response = JiraUtility.Get<JiraProjectMetadataResponseModel>($"issue/createmeta?projectKeys={ProjectKey}", Credentials);
 				return new JiraProjectMetadataResult(response);
 			}
 			catch (Exception ex)
 			{
-				throw ex;
+				throw ;
 			}
 		}
 
@@ -79,7 +78,7 @@ namespace Decisions.Jira.Steps
 			}
 			catch (Exception ex)
 			{
-				throw ex;
+				throw ;
 			}
 		}
 
@@ -92,7 +91,7 @@ namespace Decisions.Jira.Steps
 			}
 			catch (Exception ex)
 			{
-				throw ex;
+				throw;
 			}
 
 		}
@@ -106,7 +105,7 @@ namespace Decisions.Jira.Steps
 			}
 			catch (Exception ex)
 			{
-				throw ex;
+				throw;
 			}
 		}
 

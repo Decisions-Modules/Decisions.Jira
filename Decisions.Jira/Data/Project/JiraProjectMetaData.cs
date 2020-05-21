@@ -73,7 +73,7 @@ namespace Decisions.Jira.Data.Project
 	}
 
 	[DataContract]
-	public class JiraProjectMetadataModel : JiraCreateProjectResponseModel
+	public class JiraProjectMetadataModel : JiraBaseResponseModel
 	{
 		[DataMember]
 		[JsonProperty(PropertyName = "avatarUrls")]
@@ -85,7 +85,7 @@ namespace Decisions.Jira.Data.Project
 	}
 
 	[DataContract]
-	public class JiraProjectMetadataResponseModel : JiraCreateProjectResponseModel
+	public class JiraProjectMetadataResponseModel : JiraBaseResponseModel
 	{
 		[DataMember]
 		[JsonProperty(PropertyName = "projects")]
@@ -103,9 +103,10 @@ namespace Decisions.Jira.Data.Project
 		{
 			ErrorMessage = source.ErrorMessage;
 			Status = source.Status;
+			HttpStatus = source.HttpStatus;
 
 			JiraProjectMetadataResponseModel projects = (JiraProjectMetadataResponseModel)source.Data;
-			if (projects.Projects != null && projects.Projects.Length > 0)
+			if (projects!=null && projects.Projects != null && projects.Projects.Length > 0)
 			{
 				Data = projects.Projects[0];
 			}

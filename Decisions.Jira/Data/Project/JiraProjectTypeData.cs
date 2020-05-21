@@ -42,7 +42,8 @@ namespace Decisions.Jira.Data.Project
 		public JiraProjectTypeResult(JiraResultWithData source)
 		{
 			ErrorMessage = source.ErrorMessage;
-			Status = source.Status;;
+			Status = source.Status;
+			HttpStatus = source.HttpStatus;
 			Data = (JiraProjectTypeResponseModel)source.Data;
 		}
 	}

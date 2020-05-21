@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Decisions.Jira.Data.Project
 {
     [DataContract]
-    public class JiraEditProjectResponseModel : JiraBaseObject
+    public class JiraEditProjectResponseModel : JiraBaseResponseModel
     {
         [DataMember]
         [JsonProperty(PropertyName = "description")]
@@ -27,6 +27,7 @@ namespace Decisions.Jira.Data.Project
         {
             ErrorMessage = source.ErrorMessage;
             Status = source.Status;
+            HttpStatus = source.HttpStatus;
             Data = (JiraEditProjectResponseModel)source.Data;
         }
     }

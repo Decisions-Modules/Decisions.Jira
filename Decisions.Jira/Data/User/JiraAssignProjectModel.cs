@@ -3,7 +3,7 @@ using Decisions.Jira.Data.Project;
 using DecisionsFramework.Design.Properties;
 using Newtonsoft.Json;
 
-namespace Decisions.Jira.Data
+namespace Decisions.Jira.Data.User
 {
     [DataContract]
     public class JiraAssignProjectModel
@@ -19,7 +19,7 @@ namespace Decisions.Jira.Data
         public string[] Users { get; set; }
         
         [DataMember]
-        [JsonIgnore]
+        [JsonIgnoreAttribute]
         [PropertyClassificationAttribute("RoleId", 3)]
         public long RoleId { get; set; }
     }
