@@ -2,6 +2,7 @@
 using DecisionsFramework.Design.Properties;
 using DecisionsFramework.Design.Properties.Attributes;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Decisions.Jira.Data.Project
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum ProjectLead { PROJECT_LEAD, UNASSIGNED };
 
     [DataContract]
@@ -92,7 +94,7 @@ namespace Decisions.Jira.Data.Project
         [DataMember]
         [JsonProperty(PropertyName = "assigneeType")]
         [PropertyClassificationAttribute("Assignee Type", 10)]
-        public ProjectLead AssigneeType { get; set; }
+        public ProjectLead? AssigneeType { get; set; }
 
         [DataMember]
         [JsonProperty(PropertyName = "categoryId")]

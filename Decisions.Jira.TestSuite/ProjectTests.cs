@@ -13,10 +13,17 @@ namespace Decisions.JiraTestSuite
     public class ProjectTests
     {
 
-        JiraCredentials Credential { get{ return TestData.GetJiraCredentials(); } }
+        JiraCredentials CloudCredential { get { return TestData.GetJiraCredentials(); } }
+        JiraCredentials ServerCredential { get { return TestData.GetServerJiraCredentials(); } }
 
         [TestMethod]
         public void Create()
+        {
+            doCreate(CloudCredential);
+            doCreate(ServerCredential);
+        }
+
+        private void doCreate(JiraCredentials Credential)
         {
             var newUser = TestData.GetJiraUser();
             JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
@@ -41,6 +48,11 @@ namespace Decisions.JiraTestSuite
 
         [TestMethod]
         public void Edit()
+        {
+            doEdit(CloudCredential);
+            doEdit(ServerCredential);
+        }
+        private void doEdit(JiraCredentials Credential)
         {
             var newUser = TestData.GetJiraUser();
             JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
@@ -72,6 +84,11 @@ namespace Decisions.JiraTestSuite
         [TestMethod]
         public void Delete()
         {
+            doDelete(CloudCredential);
+            doDelete(ServerCredential);
+        }
+        private void doDelete(JiraCredentials Credential)
+        {
             var newUser = TestData.GetJiraUser();
             JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
 
@@ -86,7 +103,12 @@ namespace Decisions.JiraTestSuite
         }
 
         [TestMethod]
-        public void GetProjectTypeByKey()
+        public void GetProjectTypeByKey() 
+        {
+            doGetProjectTypeByKey(CloudCredential);
+            doGetProjectTypeByKey(ServerCredential);
+        }
+        private void doGetProjectTypeByKey(JiraCredentials Credential)
         {
             var newUser = TestData.GetJiraUser();
             JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
@@ -112,7 +134,11 @@ namespace Decisions.JiraTestSuite
         }
 
         [TestMethod]
-        public void GetАccessibleProjectTypeByKey()
+        public void GetАccessibleProjectTypeByKey() {
+            doGetАccessibleProjectTypeByKey(CloudCredential);
+            doGetАccessibleProjectTypeByKey(ServerCredential);
+        }
+        private void doGetАccessibleProjectTypeByKey( JiraCredentials Credential)
         {
             var newUser = TestData.GetJiraUser();
             JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
@@ -138,7 +164,12 @@ namespace Decisions.JiraTestSuite
         }
 
         [TestMethod]
-        public void GetProjectRoles()
+        public void GetProjectRoles() 
+        {
+            doGetProjectRoles(CloudCredential);
+            doGetProjectRoles(ServerCredential);
+        }
+        private void doGetProjectRoles( JiraCredentials Credential)
         {
             var newUser = TestData.GetJiraUser();
             JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);

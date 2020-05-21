@@ -1,10 +1,13 @@
 ﻿using DecisionsFramework.Design.Properties;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 
 namespace Decisions.Jira.Data
 {
 
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum JiraConnectionType
     {
         [Description("Self Hosted Server")]

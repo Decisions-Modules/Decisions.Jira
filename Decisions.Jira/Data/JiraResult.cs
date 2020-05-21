@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Decisions.Jira.Data
 {
@@ -17,6 +19,7 @@ namespace Decisions.Jira.Data
     }
 
     [DataContract]
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum JiraResultStatus { Fail = 0, Success = 1}
 
     [DataContract]

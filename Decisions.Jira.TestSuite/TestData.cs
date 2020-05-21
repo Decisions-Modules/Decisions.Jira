@@ -36,14 +36,19 @@ namespace Decisions.JiraTestSuite
 
         public static JiraProjectModel GetJiraProject(JiraCreateUserResponseModel createUserResponse)
         {
+            string aProjectTemplateKey;
+            if (createUserResponse.AccountId == null)
+                aProjectTemplateKey = "com.atlassian.jira-core-project-templates:jira-core-project-management"; // for Jira Server
+            else
+                aProjectTemplateKey = "com.pyxis.greenhopper.jira:gh-simplified-agility-kanban"; // for Jira Cloud
+
             return new JiraProjectModel
             {
                 Description = "New Project123",
                 Name = "Test123",
                 Key = "NP123",
                 ProjectIdOrKey = "NP123",
-                ProjectTemplateKey = "com.atlassian.jira-core-project-templates:jira-core-project-management",//"com.pyxis.greenhopper.jira:gh-simplified-agility-kanban",
-                //LeadAccountId = "5eb2790cb882f90bae55c19b",//"5ea1ce8c1f32260c13047996",
+                ProjectTemplateKey = aProjectTemplateKey, 
                 LeadAccountId = createUserResponse.AccountId,
                 Lead= createUserResponse.Name,
                 AssigneeType = ProjectLead.UNASSIGNED,
