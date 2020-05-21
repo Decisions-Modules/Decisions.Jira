@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Decisions.Jira.Data
+namespace Decisions.Jira
 {
     class JiraEmptyResponseModel
     {

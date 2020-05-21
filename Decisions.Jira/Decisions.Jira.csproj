@@ -212,7 +212,6 @@
     <Compile Include="Data\Project\JiraProjectMetaData.cs" />
     <Compile Include="Data\Project\JiraProjectTypeData.cs" />
     <Compile Include="Data\User\CreateJiraUserData.cs" />
-    <Compile Include="IssueSteps.cs" />
     <Compile Include="JiraSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Steps\IssueSteps.cs" />

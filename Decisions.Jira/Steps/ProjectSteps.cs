@@ -1,5 +1,4 @@
-﻿using Decisions.Jira.Data;
-using Decisions.Jira.Data.Project;
+﻿
 using DecisionsFramework.Design.Flow;
 using System;
 using System.Collections.Generic;

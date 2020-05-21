@@ -1,9 +1,8 @@
 ﻿using System.Runtime.Serialization;
-using Decisions.Jira.Data.Project;
 using DecisionsFramework.Design.Properties;
 using Newtonsoft.Json;
 
-namespace Decisions.Jira.Data.User
+namespace Decisions.Jira
 {
     [DataContract]
     public class JiraAssignProjectModel

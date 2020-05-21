@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
-namespace Decisions.Jira.Data
+namespace Decisions.Jira
 {
     [DataContract]
     public class JiraIdReferenceModel

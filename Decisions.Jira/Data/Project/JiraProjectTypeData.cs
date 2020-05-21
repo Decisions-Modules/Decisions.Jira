@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Decisions.Jira.Data.Project
+namespace Decisions.Jira
 {
 	[DataContract]
 	public class JiraProjectTypeResponseModel

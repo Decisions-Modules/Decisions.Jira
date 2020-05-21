@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Decisions.Jira.Data.Issue
+namespace Decisions.Jira
 {
     [DataContract]
     public class JiraIssueDeleteModel

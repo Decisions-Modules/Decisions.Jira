@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http.Headers;
 using System.Text;
-using Decisions.Jira.Data;
 
 namespace Decisions.Jira
 {

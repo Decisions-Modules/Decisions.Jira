@@ -4,20 +4,8 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Decisions.Jira.Data
+namespace Decisions.Jira
 {
-    /*[DataContract]
-    public class JiraResult
-    {
-        [DataMember]
-        public string Message { get; set; }
-        [DataMember]
-        public HttpStatusCode Status{ get; set; }
-        
-        [DataMember]
-        public object Data;
-    }*/
-
     [DataContract]
     [JsonConverter(typeof(StringEnumConverter))]
     public enum JiraResultStatus { Fail = 0, Success = 1}

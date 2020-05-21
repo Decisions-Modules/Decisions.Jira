@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Net;
 using Decisions.Jira;
-using Decisions.Jira.Data;
-using Decisions.Jira.Data.Project;
-using Decisions.Jira.Data.User;
 using Decisions.Jira.Steps;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
@@ -77,6 +74,9 @@ namespace Decisions.JiraTestSuite
         [TestMethod]
         public void DeleteUser()
         {
+           // UserSteps.DeleteUser(CloudCredential, "5ec6afdd5ba5dc0c1c735f22");
+            
+
             DoDeleteUser(CloudCredential);
             DoDeleteUser(ServerCredential);
         }
@@ -89,7 +89,7 @@ namespace Decisions.JiraTestSuite
 
             BaseJiraResult deleteResult;
             if (Credential.JiraConnection == JiraConnectionType.JiraCloud)
-                deleteResult=UserSteps.DeleteUser(TestData.GetJiraCredentials(), createUserResult.Data.AccountId);
+                deleteResult=UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId);
             else
                 deleteResult=UserSteps.DeleteUser(Credential, createUserResult.Data.Key);
 

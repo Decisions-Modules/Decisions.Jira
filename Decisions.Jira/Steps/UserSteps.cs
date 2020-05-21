@@ -1,6 +1,4 @@
-﻿using Decisions.Jira.Data;
-using Decisions.Jira.Data.Project;
-using Decisions.Jira.Data.User;
+﻿
 using DecisionsFramework.Design.Flow;
 using Newtonsoft.Json;
 using System;

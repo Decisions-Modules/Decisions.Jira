@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Decisions.Jira.Data.User
+namespace Decisions.Jira
 {
     [DataContract]
     public class JiraUserModel

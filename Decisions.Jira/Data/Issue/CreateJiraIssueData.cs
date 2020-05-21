@@ -1,4 +1,4 @@
-﻿using Decisions.Jira.Data.Project;
+﻿using Decisions.Jira;
 using DecisionsFramework.Design.Properties;
 using DecisionsFramework.Design.Properties.Attributes;
 using Newtonsoft.Json;
@@ -11,7 +11,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using JsonIgnoreAttribute = Newtonsoft.Json.JsonIgnoreAttribute;
 
-namespace Decisions.Jira.Data.Issue
+namespace Decisions.Jira
 {
     public class JiraIssueModel
     {

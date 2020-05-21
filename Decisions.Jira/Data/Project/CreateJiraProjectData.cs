@@ -1,4 +1,4 @@
-﻿using Decisions.Jira.Data;
+﻿using Decisions.Jira;
 using DecisionsFramework.Design.Properties;
 using DecisionsFramework.Design.Properties.Attributes;
 using Newtonsoft.Json;
@@ -10,7 +10,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Decisions.Jira.Data.Project
+namespace Decisions.Jira
 {
     [JsonConverter(typeof(StringEnumConverter))]
     public enum ProjectLead { PROJECT_LEAD, UNASSIGNED };
@@ -52,26 +52,7 @@ namespace Decisions.Jira.Data.Project
         [DataMember]
         [JsonProperty(PropertyName = "projectTemplateKey")]
         [SelectStringEditorAttribute("AvailableProjectTemplateKeys")]
-       /* [SelectStringEditorAttribute(new string[] {"com.pyxis.greenhopper.jira:gh-simplified-agility-kanban",
-                        "com.pyxis.greenhopper.jira:gh-simplified-agility-scrum",
-                        "com.pyxis.greenhopper.jira:gh-simplified-basic",
-                        "com.pyxis.greenhopper.jira:gh-simplified-kanban-classic",
-                        "com.pyxis.greenhopper.jira:gh-simplified-scrum-classic",
-                        "com.atlassian.servicedesk:simplified-it-service-desk",
-                        "com.atlassian.servicedesk:simplified-internal-service-desk",
-                        "com.atlassian.servicedesk:simplified-external-service-desk",
-                        "com.atlassian.servicedesk:simplified-hr-service-desk",
-                        "com.atlassian.servicedesk:simplified-facilities-service-desk",
-                        "com.atlassian.jira-core-project-templates:jira-core-simplified-content-management",
-                        "com.atlassian.jira-core-project-templates:jira-core-simplified-document-approval",
-                        "com.atlassian.jira-core-project-templates:jira-core-simplified-lead-tracking",
-                        "com.atlassian.jira-core-project-templates:jira-core-simplified-process-control",
-                        "com.atlassian.jira-core-project-templates:jira-core-simplified-procurement",
-                        "com.atlassian.jira-core-project-templates:jira-core-simplified-project-management",
-                        "com.atlassian.jira-core-project-templates:jira-core-simplified-recruitment",
-                        "com.atlassian.jira-core-project-templates:jira-core-simplified-task-tracking",
-                        "com.atlassian.jira.jira-incident-management-plugin:im-incident-management"
-            })]*/
+
         [PropertyClassificationAttribute("Project Template Key", 6)]
         public string ProjectTemplateKey { get; set; }
 
@@ -88,7 +69,7 @@ namespace Decisions.Jira.Data.Project
 
         [DataMember]
         [JsonProperty(PropertyName = "leadAccountId")]
-        [PropertyClassificationAttribute("Lead Account Id", 9)]
+        [PropertyClassificationAttribute("Lead Account Id (Only for Jira Cloud)", 9)]
         public string LeadAccountId { get; set; }
 
         [DataMember]

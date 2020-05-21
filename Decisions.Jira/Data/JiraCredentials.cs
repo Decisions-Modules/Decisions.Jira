@@ -4,7 +4,7 @@ using Newtonsoft.Json.Converters;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 
-namespace Decisions.Jira.Data
+namespace Decisions.Jira
 {
 
     [JsonConverter(typeof(StringEnumConverter))]

@@ -1,7 +1,5 @@
-﻿using Decisions.Jira.Data;
-using Decisions.Jira.Data.Issue;
-using Decisions.Jira.Data.Project;
-using Decisions.Jira.Data.User;
+﻿
+using Decisions.Jira;
 using Decisions.Jira.Steps;
 using System;
 using System.Collections.Generic;

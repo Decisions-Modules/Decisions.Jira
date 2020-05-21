@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using Decisions.Jira.Data;
 using DecisionsFramework.ServiceLayer;
 using Newtonsoft.Json;
 
@@ -133,6 +132,7 @@ namespace Decisions.Jira
             var result = new BaseJiraResult()
             {
                 Status = response.StatusCode == expectedStatus ? JiraResultStatus.Success : JiraResultStatus.Fail,
+                HttpStatus = response.StatusCode,
                 ErrorMessage = response.StatusCode != expectedStatus ? responseString : string.Empty,
             };
 
