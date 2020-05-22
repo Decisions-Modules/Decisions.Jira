@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using DecisionsFramework.Data.ORMapper;
+using DecisionsFramework.Design.Properties;
 using DecisionsFramework.Design.Properties.Attributes;
 using DecisionsFramework.ServiceLayer;
 using DecisionsFramework.ServiceLayer.Actions;
@@ -25,6 +26,11 @@ namespace Decisions.Jira
         [DataMember]
         [PasswordText]
         public string Password { get; set; }
+
+        [ORMField]
+        [DataMember]
+        [PropertyClassificationAttribute("Jira Connection Type", 4)]
+        public JiraConnectionType JiraConnection { get; set; }
 
         public override BaseActionType[] GetActions(AbstractUserContext userContext, EntityActionType[] types)
         {

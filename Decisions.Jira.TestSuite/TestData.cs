@@ -1,4 +1,6 @@
-﻿using Decisions.Jira.Data;
+﻿
+using Decisions.Jira;
+using Decisions.Jira.Steps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,21 +17,40 @@ namespace Decisions.JiraTestSuite
             {
                 User = "ivan@grafsoft.org",
                 Password = "OCjzLDJFXlelROp1a1wj0CC0",
-                JiraURL = "https://ivankovalchuk.atlassian.net"
+                JiraURL = "https://ivankovalchuk.atlassian.net",
+                JiraConnection = JiraConnectionType.JiraCloud
+            };
+        }
+        public static JiraCredentials GetServerJiraCredentials()
+        {
+            return new JiraCredentials
+            {
+                User = "ivan",
+                Password = "password",
+                JiraURL = "http://localhost:8080",
+                JiraConnection = JiraConnectionType.JiraServer
+
             };
         }
 
-        public static JiraProjectModel GetJiraProject()
+        public static JiraProjectModel GetJiraProject(JiraCreateUserResponseModel createUserResponse)
         {
+            string aProjectTemplateKey;
+            if (createUserResponse.AccountId == null)
+                aProjectTemplateKey = "com.atlassian.jira-core-project-templates:jira-core-project-management"; // for Jira Server
+            else
+                aProjectTemplateKey = "com.pyxis.greenhopper.jira:gh-simplified-agility-kanban"; // for Jira Cloud
+
             return new JiraProjectModel
             {
                 Description = "New Project123",
                 Name = "Test123",
                 Key = "NP123",
                 ProjectIdOrKey = "NP123",
-                ProjectTemplateKey = "com.pyxis.greenhopper.jira:gh-simplified-agility-kanban",
-                LeadAccountId = "5eb2790cb882f90bae55c19b",//"5ea1ce8c1f32260c13047996",
-                AssigneeType = "UNASSIGNED",
+                ProjectTemplateKey = aProjectTemplateKey, 
+                LeadAccountId = createUserResponse.AccountId,
+                Lead= createUserResponse.Name,
+                AssigneeType = ProjectLead.UNASSIGNED,
                 ProjectTypeKey = "business"
 
             };
@@ -47,7 +68,7 @@ namespace Decisions.JiraTestSuite
             };
         }
 
-        public static JiraAssignProjectModel GetJiraAssignProject()
+        public static JiraAssignProjectModel GetJiraAssignProject(string aProjectIdOrKey, string aUser, long aRoleId)
         {
             return new JiraAssignProjectModel
             {
@@ -58,11 +79,25 @@ namespace Decisions.JiraTestSuite
                 /*ProjectIdOrKey = GetJiraProject().ProjectIdOrKey,
                 Users = new string[] { "5eb56717a4c57d0b8b2575d9" },
                 RoleId = 10029*/
-                ProjectIdOrKey = "10000",
-                Users = new string[] { "5eb56717a4c57d0b8b2575d9" },
-                RoleId = 10002
+                ProjectIdOrKey = aProjectIdOrKey,
+                Users = new string[] { aUser },
+                RoleId = aRoleId
 
             };
         }
+
+
+        public static JiraIssueModel GetJiraIssue(string projectId, string jiraIssueId)
+        {
+            return new JiraIssueModel
+            {
+                Details = "New Issue " + DateTime.Now.ToString("ddmmyyhhss"),
+                JiraProject = new JiraIdReferenceModel(projectId),
+                Issuetype = new JiraIdReferenceModel(jiraIssueId),
+                Description = " this is issue description"
+            };
+        }
+
+
     }
 }
