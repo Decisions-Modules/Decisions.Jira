@@ -18,7 +18,6 @@ namespace Decisions.Jira
         public string IssueIdOrKey { get; set; }
 
         [DataMember]
-        [JsonProperty(PropertyName = "deleteSubtasks")]
         [PropertyClassificationAttribute("Delete Subtasks", 2)]
         public bool DeleteSubtasks { get; set; }
     }

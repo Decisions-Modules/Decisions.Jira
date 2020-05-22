@@ -17,56 +17,56 @@ namespace Decisions.JiraTestSuite
         [TestMethod]
         public void CreateUser()
         {
-            DoCreate(CloudCredential);
-            DoCreate(ServerCredential);
+            TestCreateUser(CloudCredential);
+            TestCreateUser(ServerCredential);
         }
 
-        private void DoCreate(JiraCredentials Credential)
+        private void TestCreateUser(JiraCredentials credential)
         {
             var newUser = TestData.GetJiraUser();
-            JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
+            JiraCreateUserResult createUserResult = UserSteps.CreateUser(credential, newUser);
             Assert.AreEqual(createUserResult.Status, JiraResultStatus.Success);
 
-            UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId); // for Jira Cloud
-            UserSteps.DeleteUser(Credential, createUserResult.Data.Key); // for Jira server
+            UserSteps.DeleteUser(credential, createUserResult.Data.AccountId); // for Jira Cloud
+            UserSteps.DeleteUser(credential, createUserResult.Data.Key); // for Jira server
         }
 
         [TestMethod]
         public void AssignProject()
         {
-            DoAssignProject(CloudCredential);
-            DoAssignProject(ServerCredential);
+            TestAssignProject(CloudCredential);
+            TestAssignProject(ServerCredential);
         }
 
-        private void DoAssignProject(JiraCredentials Credential)
+        private void TestAssignProject(JiraCredentials credential)
         {
             var newUser = TestData.GetJiraUser();
-            JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
+            JiraCreateUserResult createUserResult = UserSteps.CreateUser(credential, newUser);
 
             var newProject = TestData.GetJiraProject(createUserResult.Data);
-            JiraCreateProjectResult createResponse = ProjectSteps.CreateProject(Credential, newProject);
-            JiraProjectRolesResult roles = ProjectSteps.GetProjectRoles(Credential);
+            ProjectSteps.CreateProject(credential, newProject);
+            JiraProjectRolesResult roles = ProjectSteps.GetProjectRoles(credential);
 
             try
             {
                 JiraAssignProjectModel assignProject;
-                if (Credential.JiraConnection == JiraConnectionType.JiraCloud)
+                if (credential.JiraConnection == JiraConnectionType.JiraCloud)
                     assignProject = TestData.GetJiraAssignProject(newProject.Key, createUserResult.Data.AccountId, roles.Data[0].Id);
                 else
                     assignProject = TestData.GetJiraAssignProject(newProject.Key, createUserResult.Data.Key, roles.Data[0].Id);
 
-                JiraAssignProjectResult assignProjectResult = UserSteps.AssignProject(Credential, assignProject);
+                JiraAssignProjectResult assignProjectResult = UserSteps.AssignProject(credential, assignProject);
                 Assert.AreEqual(assignProjectResult.Status, JiraResultStatus.Success);
             }
             finally
             {
                 try
                 {
-                    ProjectSteps.DeleteProject(Credential, newProject.ProjectIdOrKey);
-                    UserSteps.DeleteUser(Credential, createUserResult.Data.Key); // for Jira server
-                    UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId); // for Jira cloud
+                    ProjectSteps.DeleteProject(credential, newProject.ProjectIdOrKey);
+                    UserSteps.DeleteUser(credential, createUserResult.Data.Key); // for Jira server
+                    UserSteps.DeleteUser(credential, createUserResult.Data.AccountId); // for Jira cloud
                 }
-                catch (Exception ex) { _ = ex.Message; }
+                catch { }
             }
 
         }
@@ -74,24 +74,21 @@ namespace Decisions.JiraTestSuite
         [TestMethod]
         public void DeleteUser()
         {
-            var r= UserSteps.DeleteUser(CloudCredential, "5ec6afdd5ba5dc0c1c735f22");
-
-
-            DoDeleteUser(CloudCredential);
-            DoDeleteUser(ServerCredential);
+            TestDeleteUser(CloudCredential);
+            TestDeleteUser(ServerCredential);
         }
 
-        private void DoDeleteUser(JiraCredentials Credential)
+        private void TestDeleteUser(JiraCredentials credential)
         {
 
             var newUser = TestData.GetJiraUser();
-            JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, newUser);
+            JiraCreateUserResult createUserResult = UserSteps.CreateUser(credential, newUser);
 
             BaseJiraResult deleteResult;
-            if (Credential.JiraConnection == JiraConnectionType.JiraCloud)
-                deleteResult=UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId);
+            if (credential.JiraConnection == JiraConnectionType.JiraCloud)
+                deleteResult=UserSteps.DeleteUser(credential, createUserResult.Data.AccountId);
             else
-                deleteResult=UserSteps.DeleteUser(Credential, createUserResult.Data.Key);
+                deleteResult=UserSteps.DeleteUser(credential, createUserResult.Data.Key);
 
             Assert.AreEqual(deleteResult.Status, JiraResultStatus.Success);
 
@@ -101,13 +98,13 @@ namespace Decisions.JiraTestSuite
         public void EditUser()
         {
             //doEditUser(CloudCredential);
-            DEditUser(ServerCredential);
+            TestEditUser(ServerCredential);
         }
 
-        private void DEditUser(JiraCredentials Credential)
+        private void TestEditUser(JiraCredentials credential)
         {
             var editedUser = TestData.GetJiraUser();
-            JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, editedUser);
+            JiraCreateUserResult createUserResult = UserSteps.CreateUser(credential, editedUser);
 
             JiraUserModel newUserData = new JiraUserModel
             {
@@ -119,17 +116,17 @@ namespace Decisions.JiraTestSuite
 
             try
             {
-                var EditUserResult = UserSteps.EditUser(Credential, createUserResult.Data.Key, newUserData);
+                var EditUserResult = UserSteps.EditUser(credential, createUserResult.Data.Key, newUserData);
                 Assert.AreEqual(EditUserResult.Status, JiraResultStatus.Success);
             }
             finally
             {
                 try
                 {
-                    UserSteps.DeleteUser(Credential, createUserResult.Data.Key); // for Jira server
-                    UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId); // for Jira cloud
+                    UserSteps.DeleteUser(credential, createUserResult.Data.Key); // for Jira server
+                    UserSteps.DeleteUser(credential, createUserResult.Data.AccountId); // for Jira cloud
                 }
-                catch (Exception ex) { _ = ex.Message; }
+                catch { }
             }
         }
 
@@ -137,26 +134,26 @@ namespace Decisions.JiraTestSuite
         public void SetUserPassword()
         {
             //doSetUserPassword(CloudCredential);
-            DoSetUserPassword(ServerCredential);
+            TestSetUserPassword(ServerCredential);
         }
-        private void DoSetUserPassword(JiraCredentials Credential)
+        private void TestSetUserPassword(JiraCredentials credential)
         {
             var editedUser = TestData.GetJiraUser();
-            JiraCreateUserResult createUserResult = UserSteps.CreateUser(Credential, editedUser);
+            JiraCreateUserResult createUserResult = UserSteps.CreateUser(credential, editedUser);
 
             try
             {
-                var serPasswordResult = UserSteps.SetUserPassword(Credential, createUserResult.Data.Key, "123");
+                var serPasswordResult = UserSteps.SetUserPassword(credential, createUserResult.Data.Key, "123");
                 Assert.AreEqual(serPasswordResult.Status, JiraResultStatus.Success);
             }
             finally
             {
                 try
                 {
-                    UserSteps.DeleteUser(Credential, createUserResult.Data.Key); // for Jira server
-                    UserSteps.DeleteUser(Credential, createUserResult.Data.AccountId); // for Jira cloud
+                    UserSteps.DeleteUser(credential, createUserResult.Data.Key); // for Jira server
+                    UserSteps.DeleteUser(credential, createUserResult.Data.AccountId); // for Jira cloud
                 }
-                catch (Exception ex) { _ = ex.Message; }
+                catch { }
             }
         }
 

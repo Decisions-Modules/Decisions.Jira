@@ -12,23 +12,18 @@ namespace Decisions.Jira
 	public class IssueFieldsModel
 	{
 		[DataMember]
-		[JsonProperty(PropertyName = "required")]
 		public bool Required { get; set; }
 
 		[DataMember]
-		[JsonProperty(PropertyName = "name")]
 		public string Name { get; set; }
 
 		[DataMember]
-		[JsonProperty(PropertyName = "key")]
 		public string Key { get; set; }
 
 		[DataMember]
-		[JsonProperty(PropertyName = "hasDefaultValue")]
 		public bool HasDefaultValue { get; set; }
 
 		[DataMember]
-		[JsonProperty(PropertyName = "operations")]
 		public string[] Operations { get; set; }
 	}
 
@@ -36,7 +31,6 @@ namespace Decisions.Jira
 	public class IssueFieldReferenceModel
 	{
 		[DataMember]
-		[JsonProperty(PropertyName = "issuetype")]
 		public IssueFieldsModel Issuetype { get; set; }
 	}
 
@@ -44,31 +38,24 @@ namespace Decisions.Jira
 	public class IssueTypeModel
 	{
 		[DataMember]
-		[JsonProperty(PropertyName = "self")]
 		public string Self { get; set; }
 
 		[DataMember]
-		[JsonProperty(PropertyName = "id")]
 		public string Id { get; set; }
 
 		[DataMember]
-		[JsonProperty(PropertyName = "description")]
 		public string Description { get; set; }
 
 		[DataMember]
-		[JsonProperty(PropertyName = "iconUrl")]
 		public string IconUrl { get; set; }
 
 		[DataMember]
-		[JsonProperty(PropertyName = "name")]
 		public string Name { get; set; }
 
 		[DataMember]
-		[JsonProperty(PropertyName = "subtask")]
 		public bool Subtask { get; set; }
 
 		[DataMember]
-		[JsonProperty(PropertyName = "fields")]
 		public IssueFieldReferenceModel Fields { get; set; }
 	}
 
@@ -76,11 +63,9 @@ namespace Decisions.Jira
 	public class JiraProjectMetadataModel : JiraBaseResponseModel
 	{
 		[DataMember]
-		[JsonProperty(PropertyName = "avatarUrls")]
 		public JiraAvatarUrlsModel AvatarUrls { get; set; }
 
 		[DataMember]
-		[JsonProperty(PropertyName = "issuetypes")]
 		public IssueTypeModel[] Issuetypes { get; set; }
 	}
 
@@ -88,7 +73,6 @@ namespace Decisions.Jira
 	public class JiraProjectMetadataResponseModel : JiraBaseResponseModel
 	{
 		[DataMember]
-		[JsonProperty(PropertyName = "projects")]
 		public JiraProjectMetadataModel[] Projects { get; set; }
 	}
 

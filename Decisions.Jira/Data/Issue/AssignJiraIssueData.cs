@@ -13,12 +13,10 @@ namespace Decisions.Jira
     public class JiraAssigneeModel
     {
         [DataMember]
-        [JsonProperty(PropertyName = "accountId")]
         [PropertyClassificationAttribute("User AccountId", 1)]
         public string AccountId { get; set; }
 
         [DataMember]
-        [JsonProperty(PropertyName = "key")]
         [PropertyClassificationAttribute("User Key", 2)]
         public string Key { get; set; }
 

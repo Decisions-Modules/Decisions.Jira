@@ -14,61 +14,39 @@ namespace Decisions.Jira.Steps
 	[AutoRegisterMethodsOnClass(true, "Integration/Jira/Users")]
 	public static class UserSteps
 	{
-		public static JiraCreateUserResult CreateUser(JiraCredentials Credentials, JiraUserModel JiraUserModel)
+		public static JiraCreateUserResult CreateUser(JiraCredentials credential, JiraUserModel jiraUserModel)
 		{
-			try
-			{
-				var response = JiraUtility.Post<JiraUserModel, JiraCreateUserResponseModel>("user", Credentials, JiraUserModel, HttpStatusCode.Created);
+				var response = JiraUtility.Post<JiraUserModel, JiraCreateUserResponseModel>("user", credential, jiraUserModel, HttpStatusCode.Created);
 				return new JiraCreateUserResult(response);
-			}
-			catch (Exception ex)
-			{
-				//log.Error(ex);
-				throw;
-			}
 		}
 
-		public static BaseJiraResult DeleteUser(JiraCredentials Credentials, string AccountIdOrKey)
+		public static BaseJiraResult DeleteUser(JiraCredentials credential, string accountIdOrKey)
 		{
-			try
-			{
 				BaseJiraResult response;
-				if (Credentials.JiraConnection == JiraConnectionType.JiraCloud)
-					response = JiraUtility.Delete($"user?accountId={AccountIdOrKey}", Credentials, HttpStatusCode.NoContent);
+				if (credential.JiraConnection == JiraConnectionType.JiraCloud)
+					response = JiraUtility.Delete($"user?accountId={accountIdOrKey}", credential, HttpStatusCode.NoContent);
 				else
-    			if (Credentials.JiraConnection == JiraConnectionType.JiraServer)
-					response = JiraUtility.Delete($"user?key={AccountIdOrKey}", Credentials, HttpStatusCode.NoContent);
+    			if (credential.JiraConnection == JiraConnectionType.JiraServer)
+					response = JiraUtility.Delete($"user?key={accountIdOrKey}", credential, HttpStatusCode.NoContent);
 				else 
 					throw new NotSupportedException();
 
 				return response;
-			}
-			catch (Exception ex)
-			{
-				throw ex;
-			}
 		}
 
-		public static JiraAssignProjectResult AssignProject(JiraCredentials Credentials, JiraAssignProjectModel JiraAssignmentModel)
+		public static JiraAssignProjectResult AssignProject(JiraCredentials credential, JiraAssignProjectModel jiraAssignmentModel)
 		{
-			try
-			{
-				var response = JiraUtility.Post<JiraAssignProjectModel, JiraProjectRolesResponseModel>($"project/{JiraAssignmentModel.ProjectIdOrKey}/role/{JiraAssignmentModel.RoleId}", 
-								Credentials, JiraAssignmentModel, HttpStatusCode.OK);
+				var response = JiraUtility.Post<JiraAssignProjectModel, JiraProjectRolesResponseModel>($"project/{jiraAssignmentModel.ProjectIdOrKey}/role/{jiraAssignmentModel.RoleId}", 
+								credential, jiraAssignmentModel, HttpStatusCode.OK);
 				return new JiraAssignProjectResult(response);
-			}
-			catch (Exception ex)
-			{
-				throw ex;
-			}
 		}
 
-		public static JiraCreateUserResult EditUser(JiraCredentials Credentials, string Key, JiraUserModel JiraUserModel)
+		public static JiraCreateUserResult EditUser(JiraCredentials credential, string key, JiraUserModel jiraUserModel)
 		{
-			if (Credentials.JiraConnection != JiraConnectionType.JiraServer)
+			if (credential.JiraConnection != JiraConnectionType.JiraServer)
 				throw new NotSupportedException();
 
-			var response = JiraUtility.Put<JiraUserModel, JiraCreateUserResponseModel>($"user?key={Key}", Credentials, JiraUserModel, HttpStatusCode.OK);
+			var response = JiraUtility.Put<JiraUserModel, JiraCreateUserResponseModel>($"user?key={key}", credential, jiraUserModel, HttpStatusCode.OK);
 			return new JiraCreateUserResult(response);
 		}
 
@@ -76,13 +54,13 @@ namespace Decisions.Jira.Steps
 			[JsonProperty(PropertyName = "password")]
 			public string Password { get;  set; }
 		}
-		public static BaseJiraResult SetUserPassword(JiraCredentials Credentials, string Key, string newPassword)
+		public static BaseJiraResult SetUserPassword(JiraCredentials credential, string key, string newPassword)
 		{
-			if (Credentials.JiraConnection != JiraConnectionType.JiraServer)
+			if (credential.JiraConnection != JiraConnectionType.JiraServer)
 				throw new NotSupportedException();
 
 			UserPasswordModel password = new UserPasswordModel { Password = newPassword };
-			var response = JiraUtility.Put<UserPasswordModel, JiraEmptyResponseModel>($"user/password?key={Key}", Credentials, password, HttpStatusCode.NoContent);
+			var response = JiraUtility.Put<UserPasswordModel, JiraEmptyResponseModel>($"user/password?key={key}", credential, password, HttpStatusCode.NoContent);
 			
 			return new BaseJiraResult{ ErrorMessage = response.ErrorMessage, Status = response.Status, HttpStatus = response.HttpStatus };
 		}

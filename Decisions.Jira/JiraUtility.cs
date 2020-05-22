@@ -4,14 +4,18 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using DecisionsFramework;
 using DecisionsFramework.ServiceLayer;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Decisions.Jira
 {
     public class JiraUtility
     {
         private const string BASEPATH = "/rest/api/2/";
+
+        //private static Log log = new Log(typeof(JiraUtility));
 
         public static string[] AvailableProjectTemplateKeys
         {
@@ -42,8 +46,9 @@ namespace Decisions.Jira
         }
 
 
-        private HttpClient GetClient(JiraCredentials credentials)
+        private static HttpClient GetClient(JiraCredentials credentials)
         {
+
             if (credentials == null)
             {
                 JiraSettings j = ModuleSettingsAccessor<JiraSettings>.GetSettings();
@@ -86,67 +91,96 @@ namespace Decisions.Jira
             string data = JsonConvert.SerializeObject(content, Formatting.None,
                            new JsonSerializerSettings
                            {
-                               NullValueHandling = NullValueHandling.Ignore
+                               NullValueHandling = NullValueHandling.Ignore,
+                               ContractResolver = new DefaultContractResolver
+                               {
+                                   NamingStrategy = new CamelCaseNamingStrategy()
+                               }
                            });
             return data;
         }
 
         public static JiraResultWithData Post<T, R>(string requestUri, JiraCredentials credentials, T content, HttpStatusCode expectedStatus) where R : class, new()
         {
-            string data = ParseRequestContent(content);
+            JiraResultWithData result;
+            try
+            {
+                string data = ParseRequestContent(content);
 
-            var contentStr = new StringContent(data, Encoding.UTF8, "application/json");
+                var contentStr = new StringContent(data, Encoding.UTF8, "application/json");
 
-            var client = new JiraUtility().GetClient(credentials);
-            HttpResponseMessage response;
+                var client = JiraUtility.GetClient(credentials);
+                HttpResponseMessage response = client.PostAsync(requestUri, contentStr).Result;
 
-            response = client.PostAsync(requestUri, contentStr).Result;
-
-            var result = ParseResponse<R>(response, expectedStatus);
+                result = ParseResponse<R>(response, expectedStatus);
+            }
+            catch
+            {
+                throw;
+            }
 
             return result;
         }
 
         public static JiraResultWithData Put<T, R>(string requestUri, JiraCredentials credentials, T content, HttpStatusCode expectedStatus) where R : class, new()
         {
-            string data = ParseRequestContent(content);
+            JiraResultWithData result;
+            try
+            {
+                string data = ParseRequestContent(content);
 
-            var contentStr = new StringContent(data, Encoding.UTF8, "application/json");
+                var contentStr = new StringContent(data, Encoding.UTF8, "application/json");
 
-            var client = new JiraUtility().GetClient(credentials);
-            HttpResponseMessage response;
+                var client = JiraUtility.GetClient(credentials);
+                HttpResponseMessage response = client.PutAsync(requestUri, contentStr).Result;
 
-            response = client.PutAsync(requestUri, contentStr).Result;
-
-            var result = ParseResponse<R>(response, expectedStatus);
+                result = ParseResponse<R>(response, expectedStatus);
+            }
+            catch
+            {
+                throw;
+            }
 
             return result;
         }
 
         public static BaseJiraResult Delete(string requestUri, JiraCredentials credentials, HttpStatusCode expectedStatus)
         {
-            HttpResponseMessage response = new JiraUtility().GetClient(credentials).DeleteAsync(requestUri).Result;
-
-            var responseString = response.Content.ReadAsStringAsync().Result;
-
-            var result = new BaseJiraResult()
+            BaseJiraResult result;
+            try
             {
-                Status = response.StatusCode == expectedStatus ? JiraResultStatus.Success : JiraResultStatus.Fail,
-                HttpStatus = response.StatusCode,
-                ErrorMessage = response.StatusCode != expectedStatus ? responseString : string.Empty,
-            };
+                HttpResponseMessage response = JiraUtility.GetClient(credentials).DeleteAsync(requestUri).Result;
+
+                var responseString = response.Content.ReadAsStringAsync().Result;
+
+                result = new BaseJiraResult()
+                {
+                    Status = response.StatusCode == expectedStatus ? JiraResultStatus.Success : JiraResultStatus.Fail,
+                    HttpStatus = response.StatusCode,
+                    ErrorMessage = response.StatusCode != expectedStatus ? responseString : string.Empty,
+                };
+            }
+            catch
+            {
+                throw;
+            }
 
             return result;
         }
 
         public static JiraResultWithData Get<R>(string requestUri, JiraCredentials credentials, HttpStatusCode expectedStatus = HttpStatusCode.OK) where R : class, new()
         {
-            var client = new JiraUtility().GetClient(credentials);
-            HttpResponseMessage response = new JiraUtility().GetClient(credentials).GetAsync(requestUri).Result; ;
+            JiraResultWithData result;
+            try
+            {
+                HttpResponseMessage response = JiraUtility.GetClient(credentials).GetAsync(requestUri).Result;
 
-            var responseString = response.Content.ReadAsStringAsync().Result;
-
-            var result = ParseResponse<R>(response, expectedStatus);
+                result = ParseResponse<R>(response, expectedStatus);
+            }
+            catch
+            {
+                throw;
+            }
 
             return result;
         }

@@ -12,23 +12,18 @@ namespace Decisions.Jira
 	public class JiraProjectTypeResponseModel
 	{
 		[DataMember]
-		[JsonProperty(PropertyName = "key")]
 		public string Key { get; set; }
 
 		[DataMember]
-		[JsonProperty(PropertyName = "formattedKey")]
 		public string FormattedKey { get; set; }
 
 		[DataMember]
-		[JsonProperty(PropertyName = "descriptionI18nKey")]
 		public string DescriptionI18nKey { get; set; }
 
 		[DataMember]
-		[JsonProperty(PropertyName = "icon")]
 		public string Icon { get; set; }
 
 		[DataMember]
-		[JsonProperty(PropertyName = "color")]
 		public string Color { get; set; }
 	}
 

@@ -14,15 +14,12 @@ namespace Decisions.Jira
     {
 
         [DataMember]
-        [JsonProperty(PropertyName = "self")]
         public string Self { get; set; }
 
         [DataMember]
-        [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
         [DataMember]
-        [JsonProperty(PropertyName = "key")]
         public string Key { get; set; }
     }
 
