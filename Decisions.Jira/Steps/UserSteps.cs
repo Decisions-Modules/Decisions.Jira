@@ -1,4 +1,5 @@
 ﻿
+using DecisionsFramework;
 using DecisionsFramework.Design.Flow;
 using Newtonsoft.Json;
 using System;
@@ -44,7 +45,7 @@ namespace Decisions.Jira.Steps
 		public static JiraCreateUserResult EditUser(JiraCredentials credential, string key, JiraUserModel jiraUserModel)
 		{
 			if (credential.JiraConnection != JiraConnectionType.JiraServer)
-				throw new NotSupportedException();
+				throw new BusinessRuleException("EditUser step can be used only for JiraConnectionType.JiraServer connection");
 
 			var response = JiraUtility.Put<JiraUserModel, JiraCreateUserResponseModel>($"user?key={key}", credential, jiraUserModel, HttpStatusCode.OK);
 			return new JiraCreateUserResult(response);
@@ -57,7 +58,7 @@ namespace Decisions.Jira.Steps
 		public static BaseJiraResult SetUserPassword(JiraCredentials credential, string key, string newPassword)
 		{
 			if (credential.JiraConnection != JiraConnectionType.JiraServer)
-				throw new NotSupportedException();
+				throw new BusinessRuleException("SetUserPassword step can be used only for JiraConnectionType.JiraServer connection");
 
 			UserPasswordModel password = new UserPasswordModel { Password = newPassword };
 			var response = JiraUtility.Put<UserPasswordModel, JiraEmptyResponseModel>($"user/password?key={key}", credential, password, HttpStatusCode.NoContent);
