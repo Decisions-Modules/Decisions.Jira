@@ -51,7 +51,7 @@ namespace Decisions.Jira
 
         [DataMember]
         [JsonProperty(PropertyName = "projectTemplateKey")]
-        [SelectStringEditorAttribute("AvailableProjectTemplateKeys")]
+        [SelectStringEditorAttribute("AvailableProjectTemplateKeys",SelectStringEditorType.DropdownList,false)]
 
         [PropertyClassificationAttribute("Project Template Key", 6)]
         public string ProjectTemplateKey { get; set; }

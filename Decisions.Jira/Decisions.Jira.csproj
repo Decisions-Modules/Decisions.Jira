@@ -205,7 +205,6 @@
     <Compile Include="Data\User\JiraAssignProjectModel.cs" />
     <Compile Include="Data\JiraIdReferenceModel.cs" />
     <Compile Include="Data\JiraCredentials.cs" />
-    <Compile Include="Data\JiraLeadReferenceModel.cs" />
     <Compile Include="Data\JiraResult.cs" />
     <Compile Include="Data\Project\CreateJiraProjectData.cs" />
     <Compile Include="Data\Project\EditJiraProjectData.cs" />

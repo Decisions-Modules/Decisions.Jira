@@ -74,8 +74,8 @@ namespace Decisions.JiraTestSuite
         [TestMethod]
         public void DeleteUser()
         {
-           // UserSteps.DeleteUser(CloudCredential, "5ec6afdd5ba5dc0c1c735f22");
-            
+            var r= UserSteps.DeleteUser(CloudCredential, "5ec6afdd5ba5dc0c1c735f22");
+
 
             DoDeleteUser(CloudCredential);
             DoDeleteUser(ServerCredential);

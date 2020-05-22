@@ -25,18 +25,6 @@ namespace Decisions.Jira.Steps
 				var DataObj = new ActualJiraIssueModel { Fields = NewIssue };
 				var response = JiraUtility.Post<ActualJiraIssueModel, JiraBaseResponseModel>("issue", Credentials, DataObj, HttpStatusCode.Created);
 				return new JiraCreateIssueResult(response);
-				/*
-				string data = JsonConvert.SerializeObject(DataObj, Formatting.None,
-							new JsonSerializerSettings
-							{
-								NullValueHandling = NullValueHandling.Ignore
-							});
-				var content =
-				new StringContent(data, Encoding.UTF8, "application/json");
-				var response = new JiraUtility().GetClient(Credentials).PostAsync("issue", content).Result;
-				var responseString = response.Content.ReadAsStringAsync().Result;
-				return new JiraResult { Message = response.StatusCode != HttpStatusCode.Created ? responseString : string.Empty, Status = response.StatusCode, Data = response.StatusCode == HttpStatusCode.Created ? responseString : string.Empty };
-				*/
 			}
 			catch (Exception ex)
 			{
@@ -56,16 +44,7 @@ namespace Decisions.Jira.Steps
 				//log.Error(ex);
 				throw;
 			}
-			/*try
-			{
-				var response = new JiraUtility().GetClient(Credentials).DeleteAsync($"issue/{IssueModel.IssueIdOrKey}?deleteSubtasks={IssueModel.DeleteSubtasks}").Result;
-				var responseString = response.Content.ReadAsStringAsync().Result;
-				return new JiraResult { Message = response.StatusCode != HttpStatusCode.NoContent ? responseString : string.Empty, Status = response.StatusCode, Data = response.StatusCode == HttpStatusCode.NoContent ? responseString : string.Empty };
-			}
-			catch (Exception ex)
-			{
-				throw ex;
-			}*/
+
 		}
 
 		public static BaseJiraResult EditIssue(JiraCredentials Credentials, JiraIssueModel Issue)
@@ -73,19 +52,10 @@ namespace Decisions.Jira.Steps
 			try
 			{
 				var DataObj = new ActualJiraIssueModel { Fields = Issue };
-				var response = JiraUtility.Put<ActualJiraIssueModel, JiraEmptyResponseModel>("issue/{Issue.IssueIdOrKey}", Credentials, DataObj, HttpStatusCode.Created);
+
+				var response = JiraUtility.Put<ActualJiraIssueModel, JiraEmptyResponseModel>($"issue/{Issue.IssueIdOrKey}", Credentials, DataObj, HttpStatusCode.NoContent);
+
 				return new BaseJiraResult { ErrorMessage = response.ErrorMessage, Status = response.Status, HttpStatus = response.HttpStatus };
-				/*				var DataObj = new { fields = Issue };
-								string data = JsonConvert.SerializeObject(DataObj, Formatting.None,
-											new JsonSerializerSettings
-											{
-												NullValueHandling = NullValueHandling.Ignore
-											});
-								var content =
-								new StringContent(data, Encoding.UTF8, "application/json");
-								var response = new JiraUtility().GetClient(Credentials).PutAsync($"issue/{Issue.IssueIdOrKey}", content).Result;
-								var responseString = response.Content.ReadAsStringAsync().Result;
-								return new JiraResult { Message = response.StatusCode != HttpStatusCode.NoContent ? responseString : string.Empty, Status = response.StatusCode, Data = response.StatusCode == HttpStatusCode.NoContent ? responseString : string.Empty };*/
 			}
 			catch (Exception ex)
 			{
@@ -99,13 +69,6 @@ namespace Decisions.Jira.Steps
 			{
 				var response = JiraUtility.Put<JiraAssigneeModel, JiraEmptyResponseModel>($"issue/{Assign.IssueIdOrKey}/assignee", Credentials, Assign, HttpStatusCode.NoContent);
 				return new BaseJiraResult { ErrorMessage = response.ErrorMessage, Status = response.Status, HttpStatus = response.HttpStatus };
-				/*				var DataObj = new { accountId = Assign.AccountId };
-								string data = JsonConvert.SerializeObject(DataObj);
-								var content =
-								new StringContent(data, Encoding.UTF8, "application/json");
-								var response = new JiraUtility().GetClient(Credentials).PutAsync($"issue/{Assign.IssueIdOrKey}/assignee", content).Result;
-								var responseString = response.Content.ReadAsStringAsync().Result;
-								return new JiraResult { Message = response.StatusCode != HttpStatusCode.NoContent ? responseString : string.Empty, Status = response.StatusCode, Data = response.StatusCode == HttpStatusCode.NoContent ? responseString : string.Empty };*/
 			}
 			catch (Exception ex)
 			{

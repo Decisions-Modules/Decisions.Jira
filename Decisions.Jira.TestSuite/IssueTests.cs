@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
 using Decisions.Jira;
 using Decisions.Jira.Steps;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -68,8 +69,9 @@ namespace Decisions.JiraTestSuite
         [TestMethod]
         public void Edit()
         {
-            DoEdit(CloudCredential);
             DoEdit(ServerCredential);
+            DoEdit(CloudCredential);
+            
         }
 
         private void DoEdit(JiraCredentials Credential)
@@ -82,7 +84,14 @@ namespace Decisions.JiraTestSuite
 
                 var issue = TestData.GetJiraIssue(projectMetadata.Id, projectMetadata.Issuetypes[0].Id);
 
-                IssueSteps.CreateIssue(Credential, issue);
+                JiraCreateIssueResult createIssueResult = IssueSteps.CreateIssue(Credential, issue);
+
+                issue.IssueIdOrKey = createIssueResult.Data.Key;
+                issue.Issuetype = null;
+                issue.Details = null;
+                issue.Description = "new edited description";
+                issue.JiraProject = null;
+
 
                 BaseJiraResult editResult = IssueSteps.EditIssue(Credential, issue);
                 Assert.AreEqual(editResult.Status, JiraResultStatus.Success);
@@ -135,6 +144,9 @@ namespace Decisions.JiraTestSuite
         {
             CreateEntities(Credential);
 
+            if(Credential.JiraConnection==JiraConnectionType.JiraCloud)
+                Thread.Sleep(10000); // Jira won't allow to AssignIssue without this pause (after User creating).
+
             try
             {
                 var result = ProjectSteps.GetProjectMetadateByKey(Credential, project.Key);
@@ -149,7 +161,7 @@ namespace Decisions.JiraTestSuite
                     Key = createUserResult.Data.Key,
                     IssueIdOrKey = CreateIssueResult.Data.Key
                 };
-
+                
                 BaseJiraResult AssigneResult = IssueSteps.AssignIssue(Credential, Assign);
                 Assert.AreEqual(AssigneResult.Status, JiraResultStatus.Success);
             }
