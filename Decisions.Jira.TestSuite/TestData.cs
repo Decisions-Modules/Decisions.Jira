@@ -72,13 +72,6 @@ namespace Decisions.JiraTestSuite
         {
             return new JiraAssignProjectModel
             {
-                /*ProjectIdOrKey = "10000",
-                Users = new string[] { "5ea963ee9ce9ee0b8943fed2" },
-                RoleId = 10006*/
-
-                /*ProjectIdOrKey = GetJiraProject().ProjectIdOrKey,
-                Users = new string[] { "5eb56717a4c57d0b8b2575d9" },
-                RoleId = 10029*/
                 ProjectIdOrKey = aProjectIdOrKey,
                 Users = new string[] { aUser },
                 RoleId = aRoleId
@@ -91,8 +84,8 @@ namespace Decisions.JiraTestSuite
         {
             return new JiraIssueModel
             {
-                Details = "New Issue " + DateTime.Now.ToString("ddmmyyhhss"),
-                JiraProject = new JiraIdReferenceModel(projectId),
+                Summary = "New Issue " + DateTime.Now.ToString("ddmmyyhhss"),
+                Project = new JiraIdReferenceModel(projectId),
                 Issuetype = new JiraIdReferenceModel(jiraIssueId),
                 Description = " this is issue description"
             };

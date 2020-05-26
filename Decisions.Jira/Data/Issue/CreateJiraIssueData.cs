@@ -21,22 +21,18 @@ namespace Decisions.Jira
         public string IssueIdOrKey { get; set; }
 
         [DataMember]
-        [JsonProperty(PropertyName = "summary")]
         [PropertyClassificationAttribute("Details", 2)]
-        public string Details { get; set; }
+        public string Summary { get; set; }
 
         [DataMember]
-        [JsonProperty(PropertyName = "project")]
         [PropertyClassificationAttribute("Jira Project", 3)]
-        public JiraIdReferenceModel JiraProject { get; set; }
+        public JiraIdReferenceModel Project { get; set; }
 
         [DataMember]
-        [JsonProperty(PropertyName = "issuetype")]
         [PropertyClassificationAttribute("Issue type", 4)]
         public JiraIdReferenceModel Issuetype { get; set; }
 
         [DataMember]
-        [JsonProperty(PropertyName = "description")]
         [RichTextInputEditorAttribute]
         [PropertyClassificationAttribute("Description", 5)]
         public string Description { get; set; }

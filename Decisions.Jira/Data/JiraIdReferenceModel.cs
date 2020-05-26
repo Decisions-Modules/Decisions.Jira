@@ -7,7 +7,6 @@ namespace Decisions.Jira
     public class JiraIdReferenceModel
     {
         [DataMember]
-        [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
         
         public JiraIdReferenceModel(string id)

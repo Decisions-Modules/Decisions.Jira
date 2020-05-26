@@ -10,10 +10,10 @@ namespace Decisions.Jira
     [JsonConverter(typeof(StringEnumConverter))]
     public enum JiraConnectionType
     {
-        [Description("Self Hosted Server")]
-        JiraServer,
         [Description("Jira Cloud")]
-        JiraCloud
+        JiraCloud,
+        [Description("Self Hosted Server")]
+        JiraServer
     };
 
     [DataContract]

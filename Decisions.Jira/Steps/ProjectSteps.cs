@@ -12,100 +12,47 @@ namespace Decisions.Jira.Steps
     [AutoRegisterMethodsOnClass(true, "Integration/Jira/Projects")]
     public static class ProjectSteps
     {
-		public static JiraCreateProjectResult CreateProject(JiraCredentials Credentials, JiraProjectModel NewProject)
+		public static JiraCreateProjectResult CreateProject(JiraCredentials credential, JiraProjectModel newProject)
 		{
-			try
-			{
-				var response = JiraUtility.Post<JiraProjectModel, JiraBaseResponseModel>("project", Credentials, NewProject, HttpStatusCode.Created);
+				var response = JiraUtility.Post<JiraProjectModel, JiraBaseResponseModel>("project", credential, newProject, HttpStatusCode.Created);
 				return new JiraCreateProjectResult(response);
-			}
-			catch (Exception ex)
-			{
-				//log.Error(ex);
-				throw;
-			}
 		}
 
 
-		public static BaseJiraResult DeleteProject(JiraCredentials Credentials, string ProjectIdOrKey)
+		public static BaseJiraResult DeleteProject(JiraCredentials credential, string projectIdOrKey)
 		{
-			try
-			{
-				var response = JiraUtility.Delete($"project/{ProjectIdOrKey}", Credentials, HttpStatusCode.NoContent);
+				var response = JiraUtility.Delete($"project/{projectIdOrKey}", credential, HttpStatusCode.NoContent);
 				return response;
-			}
-			catch (Exception ex)
-			{
-				//log.Error(ex);
-				throw;
-			}
 		}
 
-		public static JiraEditProjectResult EditProject(JiraCredentials Credentials, JiraProjectModel ProjectModel)
+		public static JiraEditProjectResult EditProject(JiraCredentials credential, JiraProjectModel projectModel)
 		{
-			try
-			{
-				var response = JiraUtility.Put<JiraProjectModel, JiraEditProjectResponseModel>($"project/{ProjectModel.ProjectIdOrKey}", Credentials, ProjectModel, HttpStatusCode.OK);
+				var response = JiraUtility.Put<JiraProjectModel, JiraEditProjectResponseModel>($"project/{projectModel.ProjectIdOrKey}", credential, projectModel, HttpStatusCode.OK);
 				return new JiraEditProjectResult(response);
-			}
-			catch (Exception ex)
-			{
-				//log.Error(ex);
-				throw;
-			}
 		}
 
-		public static JiraProjectMetadataResult GetProjectMetadateByKey(JiraCredentials Credentials, string ProjectKey)
+		public static JiraProjectMetadataResult GetProjectMetadateByKey(JiraCredentials credential, string projectKey)
 		{
-			try
-			{
-				var response = JiraUtility.Get<JiraProjectMetadataResponseModel>($"issue/createmeta?projectKeys={ProjectKey}", Credentials);
+				var response = JiraUtility.Get<JiraProjectMetadataResponseModel>($"issue/createmeta?projectKeys={projectKey}", credential);
 				return new JiraProjectMetadataResult(response);
-			}
-			catch (Exception ex)
-			{
-				throw ;
-			}
 		}
 
-		public static JiraProjectTypeResult GetProjectTypeByKey(JiraCredentials Credentials, string projectTypeKey)
+		public static JiraProjectTypeResult GetProjectTypeByKey(JiraCredentials credential, string projectTypeKey)
 		{
-			try
-			{
-				var response = JiraUtility.Get<JiraProjectTypeResponseModel>($"project/type/{projectTypeKey}", Credentials);
+				var response = JiraUtility.Get<JiraProjectTypeResponseModel>($"project/type/{projectTypeKey}", credential);
 				return new JiraProjectTypeResult(response);
-			}
-			catch (Exception ex)
-			{
-				throw ;
-			}
 		}
 
-		public static JiraProjectTypeResult GetАccessibleProjectTypeByKey(JiraCredentials Credentials, string projectTypeKey)
+		public static JiraProjectTypeResult GetАccessibleProjectTypeByKey(JiraCredentials credential, string projectTypeKey)
 		{
-			try
-			{
-				var response = JiraUtility.Get<JiraProjectTypeResponseModel>($"project/type/{projectTypeKey}/accessible", Credentials);
+				var response = JiraUtility.Get<JiraProjectTypeResponseModel>($"project/type/{projectTypeKey}/accessible", credential);
 				return new JiraProjectTypeResult(response);
-			}
-			catch (Exception ex)
-			{
-				throw;
-			}
-
 		}
 
-		public static JiraProjectRolesResult GetProjectRoles(JiraCredentials Credentials)
+		public static JiraProjectRolesResult GetProjectRoles(JiraCredentials credential)
 		{
-			try
-			{
-				var response = JiraUtility.Get<List<JiraProjectRolesResponseModel>>($"/rest/api/2/role", Credentials);
+				var response = JiraUtility.Get<List<JiraProjectRolesResponseModel>>($"/rest/api/2/role", credential);
 				return new JiraProjectRolesResult(response);
-			}
-			catch (Exception ex)
-			{
-				throw;
-			}
 		}
 
 	}

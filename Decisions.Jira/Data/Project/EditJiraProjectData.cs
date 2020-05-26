@@ -12,7 +12,6 @@ namespace Decisions.Jira
     public class JiraEditProjectResponseModel : JiraBaseResponseModel
     {
         [DataMember]
-        [JsonProperty(PropertyName = "description")]
         public string Description { get; set; }
     }
 
