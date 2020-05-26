@@ -1,6 +1,7 @@
 ﻿
 using Decisions.Jira;
 using Decisions.Jira.Steps;
+using DecisionsFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
@@ -15,6 +16,12 @@ namespace Decisions.JiraTestSuite
 
         private JiraUserModel newUser;
         private JiraCreateUserResult createUserResult;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            Log.LogToFile = false;
+        }
 
         private void CreateEntities(JiraCredentials credential)
         {

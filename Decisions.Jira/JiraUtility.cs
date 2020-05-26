@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -14,8 +13,6 @@ namespace Decisions.Jira
     public class JiraUtility
     {
         private const string BASEPATH = "/rest/api/2/";
-
-        //private static Log log = new Log(typeof(JiraUtility));
 
         public static string[] AvailableProjectTemplateKeys
         {
@@ -48,61 +45,79 @@ namespace Decisions.Jira
 
         private static HttpClient GetClient(JiraCredentials credentials)
         {
-
-            if (credentials == null)
+            try
             {
-                JiraSettings j = ModuleSettingsAccessor<JiraSettings>.GetSettings();
-                credentials = new JiraCredentials();
-                credentials.JiraURL = j.JiraURL;
-                credentials.Password = j.Password;
-                credentials.User = j.UserId;
-                credentials.JiraConnection = j.JiraConnection;
+                if (credentials == null)
+                {
+                    JiraSettings j = ModuleSettingsAccessor<JiraSettings>.GetSettings();
+                    credentials = new JiraCredentials
+                    {
+                        JiraURL = j.JiraURL,
+                        Password = j.Password,
+                        User = j.UserId,
+                        JiraConnection = j.JiraConnection
+                    };
+                }
+
+                HttpClient httpClient = new HttpClient { BaseAddress = new Uri(credentials.JiraURL.TrimEnd('/') + BASEPATH) };
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
+
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationManager().GetAuthHeader(credentials);
+                return httpClient;
             }
-
-            HttpClient httpClient = new HttpClient { BaseAddress = new Uri(credentials.JiraURL.TrimEnd('/') + BASEPATH) };
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
-
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationManager().GetAuthHeader(credentials);
-            return httpClient;
+            catch (Exception ex)
+            {
+                throw new LoggedException($"Error setting up connection to {credentials.JiraURL}", ex);
+            }
         }
 
         private static JiraResultWithData ParseResponse<T>(HttpResponseMessage response, HttpStatusCode expectedStatus) where T : class, new()
         {
-            var responseString = response.Content.ReadAsStringAsync().Result;
-            var result = new JiraResultWithData()
+            try
             {
-                Status = response.StatusCode == expectedStatus ? JiraResultStatus.Success : JiraResultStatus.Fail,
-                HttpStatus = response.StatusCode,
-                ErrorMessage = response.StatusCode != expectedStatus ? responseString : string.Empty,
-                Data = response.StatusCode == expectedStatus ? JsonConvert.DeserializeObject<T>(responseString) : null
-            };
+                var responseString = response.Content.ReadAsStringAsync().Result;
+                var result = new JiraResultWithData()
+                {
+                    Status = response.StatusCode == expectedStatus ? JiraResultStatus.Success : JiraResultStatus.Fail,
+                    HttpStatus = response.StatusCode,
+                    ErrorMessage = response.StatusCode != expectedStatus ? responseString : string.Empty,
+                    Data = response.StatusCode == expectedStatus ? JsonConvert.DeserializeObject<T>(responseString) : null
+                };
 
-            if (result.Status == JiraResultStatus.Fail && result.ErrorMessage.Length == 0)
-            {
-                result.ErrorMessage = $"{{ \"error\":{response.StatusCode} }}";
+                if (result.Status == JiraResultStatus.Fail && result.ErrorMessage.Length == 0)
+                {
+                    result.ErrorMessage = $"{{ \"error\":{response.StatusCode} }}";
+                }
+
+                return result;
             }
-
-            return result;
+            catch (Exception ex)
+            {
+                throw new LoggedException("Error parsing result", ex);
+            }
         }
 
         private static string ParseRequestContent<T>(T content)
         {
-            string data = JsonConvert.SerializeObject(content, Formatting.None,
-                           new JsonSerializerSettings
-                           {
-                               NullValueHandling = NullValueHandling.Ignore,
-                               ContractResolver = new DefaultContractResolver
-                               {
-                                   NamingStrategy = new CamelCaseNamingStrategy()
-                               }
-                           });
-            return data;
+            try
+            {
+                var jsonSettings = new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    ContractResolver = new DefaultContractResolver { NamingStrategy = new CamelCaseNamingStrategy() }
+                };
+                string data = JsonConvert.SerializeObject(content, Formatting.None, jsonSettings);
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw new LoggedException("Error parsing request content", ex);
+            }
         }
 
         public static JiraResultWithData Post<T, R>(string requestUri, JiraCredentials credentials, T content, HttpStatusCode expectedStatus) where R : class, new()
         {
-            JiraResultWithData result;
             try
             {
                 string data = ParseRequestContent(content);
@@ -110,21 +125,19 @@ namespace Decisions.Jira
                 var contentStr = new StringContent(data, Encoding.UTF8, "application/json");
 
                 var client = JiraUtility.GetClient(credentials);
+
                 HttpResponseMessage response = client.PostAsync(requestUri, contentStr).Result;
 
-                result = ParseResponse<R>(response, expectedStatus);
+                return ParseResponse<R>(response, expectedStatus);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new LoggedException("Error to process POST to Jira", ex);
             }
-
-            return result;
         }
 
         public static JiraResultWithData Put<T, R>(string requestUri, JiraCredentials credentials, T content, HttpStatusCode expectedStatus) where R : class, new()
         {
-            JiraResultWithData result;
             try
             {
                 string data = ParseRequestContent(content);
@@ -132,40 +145,36 @@ namespace Decisions.Jira
                 var contentStr = new StringContent(data, Encoding.UTF8, "application/json");
 
                 var client = JiraUtility.GetClient(credentials);
+
                 HttpResponseMessage response = client.PutAsync(requestUri, contentStr).Result;
 
-                result = ParseResponse<R>(response, expectedStatus);
+                return ParseResponse<R>(response, expectedStatus);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new LoggedException("Error to process PUT to Jira", ex);
             }
-
-            return result;
         }
 
         public static BaseJiraResult Delete(string requestUri, JiraCredentials credentials, HttpStatusCode expectedStatus)
         {
-            BaseJiraResult result;
             try
             {
                 HttpResponseMessage response = JiraUtility.GetClient(credentials).DeleteAsync(requestUri).Result;
 
                 var responseString = response.Content.ReadAsStringAsync().Result;
 
-                result = new BaseJiraResult()
+                return new BaseJiraResult()
                 {
                     Status = response.StatusCode == expectedStatus ? JiraResultStatus.Success : JiraResultStatus.Fail,
                     HttpStatus = response.StatusCode,
                     ErrorMessage = response.StatusCode != expectedStatus ? responseString : string.Empty,
                 };
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new LoggedException("Error to process DELETE to Jira", ex);
             }
-
-            return result;
         }
 
         public static JiraResultWithData Get<R>(string requestUri, JiraCredentials credentials, HttpStatusCode expectedStatus = HttpStatusCode.OK) where R : class, new()
@@ -175,15 +184,12 @@ namespace Decisions.Jira
             {
                 HttpResponseMessage response = JiraUtility.GetClient(credentials).GetAsync(requestUri).Result;
 
-                result = ParseResponse<R>(response, expectedStatus);
+                return ParseResponse<R>(response, expectedStatus);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new LoggedException("Error to process GET to Jira", ex);
             }
-
-            return result;
         }
-
     }
 }

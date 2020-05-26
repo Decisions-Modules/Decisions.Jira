@@ -1,8 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Threading;
 using Decisions.Jira;
 using Decisions.Jira.Steps;
+using DecisionsFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Decisions.JiraTestSuite
@@ -18,6 +20,12 @@ namespace Decisions.JiraTestSuite
         private JiraCreateUserResult createUserResult;
         private JiraProjectModel project;
         private JiraCreateProjectResult createProjectResult;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            Log.LogToFile = false;
+        }
 
         private void CreateEntities(JiraCredentials credential)
         {

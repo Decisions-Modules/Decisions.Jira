@@ -2,6 +2,7 @@
 using System.Net;
 using Decisions.Jira;
 using Decisions.Jira.Steps;
+using DecisionsFramework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 
@@ -19,6 +20,12 @@ namespace Decisions.JiraTestSuite
         {
             TestCreateUser(CloudCredential);
             TestCreateUser(ServerCredential);
+        }
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            Log.LogToFile = false;
         }
 
         private void TestCreateUser(JiraCredentials credential)
