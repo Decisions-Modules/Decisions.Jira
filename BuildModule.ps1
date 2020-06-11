@@ -1,3 +1,5 @@
+#Requires -RunAsAdministrator
+
 param (
 	[Parameter(Mandatory=$false)][string]$msbuild,
 	[Parameter(Mandatory=$false)][string]$framework
@@ -88,6 +90,56 @@ if (!$framework) {
 	}
 }
 
+function StopHostManager {
+	$local:service = (get-service "servicehostmanager");
+	$local:serviceWatcher = (get-service "servicehostmanagerwatcher")
+
+	if ($local:serviceWatcher.status -eq "Running") {
+		$local:serviceWatcher.Stop()
+	}
+	if ($local:service.status -eq "Running") {
+		$local:service.Stop()
+	}
+
+	Write-Output "stopping SHM..."
+	do { $local:service.refresh(); sleep 1; } until ($local:service.status -eq "Stopped")
+}
+function StartHostManager {
+	$local:service = (get-service "servicehostmanager");
+	Write-Output "starting SHM..."
+	$local:service.Start()
+
+	do { $local:service.refresh(); sleep 1; } until ($local:service.status -eq "Running")
+	Write-Output "SHM Started."
+}
+
+function FindModuleName($buildProj)
+{
+	[xml]$local:XmlDocument = Get-Content -Path $buildProj
+
+	foreach($local:target in $local:XmlDocument.Project.Target){
+		if($local:target.Name -eq "build_module") 
+		{
+			$local:cmdline = $local:target.Exec.Command
+			break
+		}
+	}
+
+	$local:cmdline = $local:cmdline -split ' '
+	$local:index = [array]::indexof($local:cmdline,"-buildmodule")
+	$local:index++
+
+	return $local:cmdline[$local:index]
+}
+function CopyModule($basePath)
+{
+	$local:moduleName = FindModuleName("$basePath\build.proj")
+	$local:fullModuleName = "$basePath\$local:moduleName.zip"
+	$local:destination  = "C:\Program Files\Decisions\Decisions Services Manager\modules\$local:moduleName.zip"
+
+	Copy-Item $local:fullModuleName $local:destination
+}
+
 Write-Output "Modifying Module.Build.xml"
 $basepath = Get-Location
 ModifyModuleBuildFile $framework $basepath
@@ -97,3 +149,8 @@ Write-Output "Compiling Project by build.proj, or by .sln file."
 $compiletarget = GetCompileTarget $basepath
 
 Start-Process -Wait -FilePath "$msbuild" -Args "$compiletarget" -WorkingDirectory "." -RedirectStandardOutput "BuildModule.ps1.log" -RedirectStandardError "BuildModule.ps1.error" 
+
+StopHostManager
+CopyModule($basePath)
+StartHostManager
+
