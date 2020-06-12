@@ -135,7 +135,7 @@ function CopyModule($basePath)
 {
 	$local:moduleName = FindModuleName("$basePath\build.proj")
 	$local:fullModuleName = "$basePath\$local:moduleName.zip"
-	$local:destination  = "C:\Program Files\Decisions\Decisions Services Manager\modules\$local:moduleName.zip"
+	$local:destination  = "C:\Program Files\Decisions\Decisions Services Manager\CustomModules\$local:moduleName.zip"
 
 	Copy-Item $local:fullModuleName $local:destination
 }
