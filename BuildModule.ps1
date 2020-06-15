@@ -1,4 +1,4 @@
-#Requires -RunAsAdministrator
+#R equires -RunAsAdministrator
 
 param (
     [Parameter(Mandatory=$false)][string]$msbuild,
@@ -81,8 +81,7 @@ function GetCompileTarget($basePath) {
     if (Test-Path -PathType leaf -LiteralPath $guess ) {
         return $guess
     }
-    Write-Output "Could not find a build.proj file, please create one."
-    exit
+    throw "Could not find a build.proj file, please create one."
 }
 
 
@@ -138,6 +137,15 @@ function CopyModule($basePath)
     Copy-Item $local:fullModuleName $local:destination
 }
 
+function FindSolutionFile($basePath) {
+    $local:filelist = Get-ChildItem -Path "$basePath\*.sln"
+    if($local:filelist.Length -eq 0)
+    {
+        throw "Can not find *.sln file"
+    }
+    return $local:filelist[0].FullName
+}
+
 if ($msbuild) {
     Write-Output "Using $msbuild"
 } else {
@@ -171,8 +179,15 @@ Write-Output "Module.Modified.xml should now exist with correct paths.  Please c
 Write-Output "Compiling Project by build.proj, or by .sln file."
 $compiletarget = GetCompileTarget $basepath
 
-Start-Process -Wait -FilePath "$msbuild" -Args "$compiletarget" -WorkingDirectory "." -RedirectStandardOutput "BuildModule.ps1.log" -RedirectStandardError "BuildModule.ps1.error"
+$solution = FindSolutionFile($basePath)
+& $msbuild -t:restore $solution
+& $msbuild $compiletarget
+if ($LastExitCode -ne 0)
+{
+   throw "Compile failed with the return code: $LastExitCode"
+}
 
 StopHostManager
 CopyModule($basePath)
 StartHostManager
+
