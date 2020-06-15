@@ -1,4 +1,4 @@
-#R equires -RunAsAdministrator
+#Requires -RunAsAdministrator
 
 param (
     [Parameter(Mandatory=$false)][string]$msbuild,
@@ -134,6 +134,7 @@ function CopyModule($basePath)
     $local:fullModuleName = "$basePath\$local:moduleName.zip"
     $local:destination  = "C:\Program Files\Decisions\Decisions Services Manager\CustomModules\$local:moduleName.zip"
 
+    Write-Output "Copying module..."
     Copy-Item $local:fullModuleName $local:destination
 }
 
