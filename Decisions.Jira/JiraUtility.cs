@@ -179,7 +179,6 @@ namespace Decisions.Jira
 
         public static JiraResultWithData Get<R>(string requestUri, JiraCredentials credentials, HttpStatusCode expectedStatus = HttpStatusCode.OK) where R : class, new()
         {
-            JiraResultWithData result;
             try
             {
                 HttpResponseMessage response = JiraUtility.GetClient(credentials).GetAsync(requestUri).Result;
