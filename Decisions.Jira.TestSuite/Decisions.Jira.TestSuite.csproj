@@ -39,10 +39,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Decisions.Jira">
-      <HintPath>..\Decisions.Jira\obj\Debug\Decisions.Jira.dll</HintPath>
+      <HintPath>..\Decisions.Jira\bin\Debug\Decisions.Jira.dll</HintPath>
     </Reference>
     <Reference Include="DecisionsFramework">
-      <HintPath>..\..\..\..\..\Program Files\Decisions\Decisions Services Manager\bin\DecisionsFramework.dll</HintPath>
+      <HintPath>..\Decisions.Jira\bin\Debug\DecisionsFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
