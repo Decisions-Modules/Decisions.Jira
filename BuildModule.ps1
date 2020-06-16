@@ -58,7 +58,7 @@ function FindFrameworkFiles {
     } catch {}
     if (!$firstRes)
     {
-        $firstRes = (Get-ChildItem -Path "c:\Program Files\Decisions\Decisions Services Manager" -Include "DecisionsFramework.Net.dll" -Recurse -ErrorAction SilentlyContinue | Where-Object { ($_.PSIsContainer -eq $false) -and  ( $_.Name -like "*$fileName*") })[0].DirectoryName
+        $firstRes = (Get-ChildItem -Path "${Env:ProgramFiles}\Decisions\Decisions Services Manager" -Include "DecisionsFramework.Net.dll" -Recurse -ErrorAction SilentlyContinue | Where-Object { ($_.PSIsContainer -eq $false) -and  ( $_.Name -like "*$fileName*") })[0].DirectoryName
     }
     return $firstRes
 }
@@ -132,7 +132,7 @@ function CopyModule($basePath)
 {
     $local:moduleName = FindModuleName("$basePath\build.proj")
     $local:fullModuleName = "$basePath\$local:moduleName.zip"
-    $local:destination  = "C:\Program Files\Decisions\Decisions Services Manager\CustomModules\$local:moduleName.zip"
+    $local:destination  = "${Env:ProgramFiles}\Decisions\Decisions Services Manager\CustomModules\$local:moduleName.zip"
 
     Write-Output "Copying module..."
     Copy-Item $local:fullModuleName $local:destination
