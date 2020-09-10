@@ -80,7 +80,7 @@ namespace Decisions.Jira
                 var result = new JiraResultWithData()
                 {
                     Status = response.StatusCode == expectedStatus ? JiraResultStatus.Success : JiraResultStatus.Fail,
-                    HttpStatus = response.StatusCode,
+                    HttpStatus = (int)response.StatusCode,
                     ErrorMessage = response.StatusCode != expectedStatus ? responseString : string.Empty,
                     Data = response.StatusCode == expectedStatus ? JsonConvert.DeserializeObject<T>(responseString) : null
                 };
@@ -167,7 +167,7 @@ namespace Decisions.Jira
                 return new BaseJiraResult()
                 {
                     Status = response.StatusCode == expectedStatus ? JiraResultStatus.Success : JiraResultStatus.Fail,
-                    HttpStatus = response.StatusCode,
+                    HttpStatus = (int)response.StatusCode,
                     ErrorMessage = response.StatusCode != expectedStatus ? responseString : string.Empty,
                 };
             }

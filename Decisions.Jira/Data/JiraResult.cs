@@ -20,7 +20,7 @@ namespace Decisions.Jira
         public JiraResultStatus Status { get; set; }
 
         [DataMember]
-        public HttpStatusCode HttpStatus { get; set; }
+        public int HttpStatus { get; set; }
 
     }
 
