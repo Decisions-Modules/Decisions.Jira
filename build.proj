@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project
     xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="build_all">
-    <PropertyGroup>
-        <CreateModule>"C:\Program Files\Decisions\Decisions Services Manager\CreateModule.exe"</CreateModule>
-    </PropertyGroup>
-    <Target Name="build_all">
-        <MSBuild Projects=".\Decisions.Jira\Decisions.Jira.csproj" />
+    
+	<Target Name="build_all">
+        <Exec Command="dotnet publish .\Decisions.Jira\Decisions.Jira.csproj --runtime win-x64 --self-contained false --output .\Decisions.Jira\obj -c Debug" />
+		<Exec Command="dotnet tool update --global CreateDecisionsModule-GlobalTool" />
         <CallTarget Targets="build_module"/>
     </Target>
-    <Target Name="build_module">
-        <Exec Command="$(CreateModule) -buildmodule Decisions.Jira -output &quot;.&quot; -buildfile Module.Modified.xml"/>
+    
+	<Target Name="build_module">
+        <Exec Command="CreateDecisionsModule -buildmodule Decisions.Jira -output &quot;.&quot; -buildfile Module.Build.xml"/>
     </Target>
+
 </Project>
