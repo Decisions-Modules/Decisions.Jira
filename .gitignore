@@ -1,12 +1,29 @@
-.vs
-*.dll
-*.pdb
+*.sln.docstates
+*.suo
+*.user
+*.userosscache
+*.sln.ide
+*.ps1.log
 *.zip
-packages
+*.ps1.error
+.vs/*
 Module.Modified.xml
-Decisions.Jira.TestSuite/bin/
-Decisions.Jira.TestSuite/obj/
-Decisions.Jira/bin/
-Decisions.Jira/obj/
 
+# Build results
+**/[Dd]ebug/
+**/[Dd]ebugPublic/
+**/[Rr]elease/
+**/[Rr]eleases/
+**/x64/
+**/x86/
+**/build/
+**/bld/
+**/[Bb]in/
+**/[Oo]bj/
+
+# NuGet
+*.nupkg
+**/packages/*
+!**/packages/build/
+.idea/
 
