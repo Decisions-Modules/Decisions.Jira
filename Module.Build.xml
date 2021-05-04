@@ -14,5 +14,6 @@
     <MsSqlScript/>
   </Resources>
   <Version/>
+  <ImagePath>./image.png</ImagePath>
   <Description>Module to manage Issues, Users and Projects in Jira.</Description>
 </CreateModuleInfo>
