@@ -3,6 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Decisions.Jira", "Decisions.Jira\Decisions.Jira.csproj", "{B782A73F-DB60-4A66-8522-5A8849A0F2D0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Decisions.Jira.TestSuite", "Decisions.Jira.TestSuite\Decisions.Jira.TestSuite.csproj", "{DB1CBBC7-42A8-4261-9057-EB7F1238DBB4}"
 EndProject
