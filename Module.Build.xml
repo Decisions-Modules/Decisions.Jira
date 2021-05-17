@@ -4,6 +4,9 @@
     <CoreServicesDlls>
       <string>.\Decisions.Jira\obj\Debug\net5.0\win-x64\Decisions.Jira.dll</string>
     </CoreServicesDlls>
+    <ReferenceDlls>
+      <string>.\Decisions.Jira\obj\Swashbuckle.AspNetCore.Swagger.dll</string>
+    </ReferenceDlls>
     <CliDlls/>
     <WebPages/>
 	<SilverlightDlls/>
