@@ -16,7 +16,7 @@
     <ObjectsToImport/>
     <MsSqlScript/>
   </Resources>
-  <Version>7.10</Version>
+  <Version>8.0.0-beta</Version>
   <ImagePath>./image.png</ImagePath>
   <Description>Module to manage Issues, Users and Projects in Jira.</Description>
 </CreateModuleInfo>
