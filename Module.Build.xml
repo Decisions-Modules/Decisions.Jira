@@ -2,7 +2,7 @@
 <CreateModuleInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Resources NoComponents="true">
     <CoreServicesDlls>
-      <string>.\Decisions.Jira\obj\Debug\net6.0\win-x64\Decisions.Jira.dll</string>
+      <string>.\Decisions.Jira\obj\Decisions.Jira.dll</string>
     </CoreServicesDlls>
     <ReferenceDlls>
       <string>.\Decisions.Jira\obj\Swashbuckle.AspNetCore.Swagger.dll</string>
@@ -16,7 +16,7 @@
     <ObjectsToImport/>
     <MsSqlScript/>
   </Resources>
-  <Version>8.0.0-beta</Version>
+  <Version>8.9.0</Version>
   <ImagePath>./image.png</ImagePath>
   <Description>Module to manage Issues, Users and Projects in Jira.</Description>
 </CreateModuleInfo>
