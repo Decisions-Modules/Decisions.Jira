@@ -1,0 +1,22 @@
+{
+  "Resources": {
+	"NoComponents": true,
+    "CoreServicesDlls": [
+		"./Decisions.Jira/obj/Decisions.Jira.dll"
+    ],
+    "ReferenceDlls": [
+      "./Decisions.Jira/obj/Swashbuckle.AspNetCore.Swagger.dll"
+    ],
+    "CliDlls": null,
+    "WebPages": null,
+    "SilverlightDlls": null,
+    "AgentDlls": null,
+    "InstallScript": null,
+    "SqlScripts": null,
+    "ObjectsToImport": null,
+    "MsSqlScript": null
+  },
+  "Version": "8.15.0",
+  "ImagePath": "./image.png",
+  "Description": "Module to manage Issues, Users and Projects in Jira."
+}
