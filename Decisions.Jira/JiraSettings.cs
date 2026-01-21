@@ -32,13 +32,6 @@ namespace Decisions.Jira
         [PropertyClassificationAttribute("Jira Connection Type", 4)]
         public JiraConnectionType JiraConnection { get; set; }
 
-        public override BaseActionType[] GetActions(AbstractUserContext userContext, EntityActionType[] types)
-        {
-            List<BaseActionType> all = new List<BaseActionType>();
-            all.Add(new EditEntityAction(typeof(JiraSettings), "Edit", "Edit"));
-            return all.ToArray();
-        }
-
         public void Initialize()
         {
             JiraSettings me = ModuleSettingsAccessor<JiraSettings>.GetSettings();
