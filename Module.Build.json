@@ -16,7 +16,7 @@
     "ObjectsToImport": null,
     "MsSqlScript": null
   },
-  "Version": "9.21",
+  "Version": "9.0.0",
   "ImagePath": "./image.png",
   "Description": "Module to manage Issues, Users and Projects in Jira."
 }
